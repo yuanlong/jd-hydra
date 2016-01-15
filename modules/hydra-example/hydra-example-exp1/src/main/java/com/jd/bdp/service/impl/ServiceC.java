@@ -22,7 +22,8 @@ public class ServiceC extends AbstractService implements InterfaceC {
     }
     @Override
     public Object functionC(Object... objects) {
-        return "C";
+        throw new RuntimeException("test exception");
+//        return "C";
     }
 }
 

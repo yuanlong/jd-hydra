@@ -31,6 +31,12 @@
         <dependency>
             <groupId>com.jd.bdp</groupId>
             <artifactId>hydra-collector-service</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.collections</groupId>
+                    <artifactId>google-collections</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--引入场景一进行集成测试-->
         <dependency>
@@ -59,27 +65,27 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-                <!--to package jar with only *.java files-->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <id>package-only-java-resources</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                            <phase>package</phase>
-                            <configuration>
-                                <includes>
-                                    <include>**/*.class</include>
-                                    <include>trigger-context2.xml</include>
-                                </includes>
-                                <classifier>assemble</classifier>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
+            <!--to package jar with only *.java files-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>package-only-java-resources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <includes>
+                                <include>**/*.class</include>
+                                <include>trigger-context2.xml</include>
+                            </includes>
+                            <classifier>assemble</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>

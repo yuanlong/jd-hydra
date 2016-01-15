@@ -45,29 +45,4 @@
             <artifactId>dubbo</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <!--to package jar with only *.java files-->
-            <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <executions>
-                <execution>
-                    <id>package-only-java-resources</id>
-                    <goals>
-                        <goal>jar</goal>
-                    </goals>
-                    <phase>package</phase>
-                    <configuration>
-                        <includes>
-                            <include>**/*.class</include>
-                        </includes>
-                        <classifier>assemble</classifier>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-        </plugins>
-    </build>
 </project>
