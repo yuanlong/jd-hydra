@@ -19,8 +19,6 @@ package com.jd.bdp.hydra.store.inter;
 
 import com.jd.bdp.hydra.Span;
 
-import java.io.IOException;
-
 /**
   * User: yfliuyu
  * Date: 13-4-16

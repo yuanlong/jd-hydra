@@ -14,24 +14,18 @@
  *    limitations under the License.
  */
 
-package com.jd.bdp.hydra.mysql.persistent.dao;
-
-import com.jd.bdp.hydra.mysql.persistent.entity.Trace;
-
-import java.util.List;
+package com.jd.bdp.service.exp2.inter;
 
 /**
- * User: biandi
- * Date: 13-5-8
- * Time: 下午3:29
+ * User: xiangkui
+ * Date: 13-4-9
+ * Time: 下午1:24
  */
-public interface TraceMapper {
 
-    List<Trace> findTraces(String serviceId, Long startTime, int num);
-    List<Trace> findTracesByDuration(String serviceId, Long startTime, int durationMin, int durationMax, int num);
-    List<Trace> findTracesEx(String serviceId, Long startTime, int num);
+/**
+ * 某个Dubbo服务
+ */
+public interface InterfaceE {
 
-    public void addTrace(Trace t);
-    void deleteAllTraces();//只用于测试
-
+    Object functionE(Object... objects);
 }

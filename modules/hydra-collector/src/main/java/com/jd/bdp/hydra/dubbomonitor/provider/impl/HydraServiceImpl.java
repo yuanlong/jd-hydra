@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class HydraServiceImpl implements HydraService {
     private static final Logger log = LoggerFactory.getLogger(HydraServiceImpl.class);

@@ -6,7 +6,6 @@ import com.jd.bdp.hydra.dubbomonitor.provider.impl.support.Configuration;
 import com.jd.bdp.hydra.store.inter.InsertService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;

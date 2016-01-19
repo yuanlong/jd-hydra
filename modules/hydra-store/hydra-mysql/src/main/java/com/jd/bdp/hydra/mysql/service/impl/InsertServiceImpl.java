@@ -10,8 +10,6 @@ import com.jd.bdp.hydra.mysql.persistent.entity.Absannotation;
 import com.jd.bdp.hydra.mysql.persistent.entity.Trace;
 import com.jd.bdp.hydra.store.inter.InsertService;
 
-import java.io.IOException;
-
 /**
  * User: biandi
  * Date: 13-5-9

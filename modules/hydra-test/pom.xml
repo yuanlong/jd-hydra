@@ -14,6 +14,8 @@
     <packaging>pom</packaging>
     <name>HYDRA TEST</name>
     <modules>
+        <module>hydra-example-exp1</module>
+        <module>hydra-example-exp2</module>
         <module>hydra-test-benchmark</module>
         <module>hydra-test-integration</module>
         <module>hydra-test-interface</module>

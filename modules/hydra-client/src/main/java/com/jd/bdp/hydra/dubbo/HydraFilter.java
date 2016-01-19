@@ -17,23 +17,19 @@ package com.jd.bdp.hydra.dubbo;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
-import com.alibaba.dubbo.common.extension.ExtensionLoader;
-import com.alibaba.dubbo.container.Container;
-import com.alibaba.dubbo.container.spring.SpringContainer;
 import com.alibaba.dubbo.remoting.TimeoutException;
 import com.alibaba.dubbo.rpc.*;
 import com.jd.bdp.hydra.BinaryAnnotation;
 import com.jd.bdp.hydra.Endpoint;
 import com.jd.bdp.hydra.Span;
+import com.jd.bdp.hydra.agent.Trace;
 import com.jd.bdp.hydra.agent.Tracer;
 import com.jd.bdp.hydra.agent.support.TracerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-
-import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  *
@@ -47,6 +43,30 @@ public class HydraFilter implements Filter {
 
     // 调用过程拦截
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
+        String methodName = invocation.getMethodName();
+        Class[] parameterTypes = invocation.getParameterTypes();
+        Method method = null;
+        try {
+            method = invoker.getInterface().getMethod(methodName, parameterTypes);
+        } catch (NoSuchMethodException e) {
+            logger.error("Hydra get method error", e);
+        }
+        Annotation annotation = method.getAnnotation(Trace.class);
+
+
+        long start = System.currentTimeMillis();
+        RpcContext context = RpcContext.getContext();
+        boolean isConsumerSide = context.isConsumerSide();
+
+        //首先判断是否需要追踪
+        if (context.isConsumerSide() && tracer.getParentSpan() == null && annotation == null) {
+            return invoker.invoke(invocation);
+        }
+        if (context.isProviderSide() && invocation.getAttachment(TracerUtils.TID) == null && invocation.getAttachment(TracerUtils.PID) == null && invocation.getAttachment(TracerUtils.SID) == null) {
+            return invoker.invoke(invocation);
+        }
+
+
         //异步获取serviceId，没获取到不进行采样
         String serviceId = tracer.getServiceId(RpcContext.getContext().getUrl().getServiceInterface());
         if (serviceId == null) {
@@ -54,9 +74,6 @@ public class HydraFilter implements Filter {
             return invoker.invoke(invocation);
         }
 
-        long start = System.currentTimeMillis();
-        RpcContext context = RpcContext.getContext();
-        boolean isConsumerSide = context.isConsumerSide();
         Span span = null;
         Endpoint endpoint = null;
         try {
@@ -83,18 +100,18 @@ public class HydraFilter implements Filter {
             RpcInvocation invocation1 = (RpcInvocation) invocation;
             setAttachment(span, invocation1);//设置需要向下游传递的参数
             Result result = invoker.invoke(invocation);
-            if (result.getException() != null){
+            if (result.getException() != null) {
                 catchException(result.getException(), endpoint);
             }
             return result;
-        }catch (RpcException e) {
-            if (e.getCause() != null && e.getCause() instanceof TimeoutException){
+        } catch (RpcException e) {
+            if (e.getCause() != null && e.getCause() instanceof TimeoutException) {
                 catchTimeoutException(e, endpoint);
-            }else {
+            } else {
                 catchException(e, endpoint);
             }
             throw e;
-        }finally {
+        } finally {
             if (span != null) {
                 long end = System.currentTimeMillis();
                 invokerAfter(invocation, endpoint, span, end, isConsumerSide);//调用后记录annotation

@@ -70,7 +70,6 @@
     <!-- Modules -->
     <modules>
         <module>modules/hydra-web</module>
-        <module>modules/hydra-example</module>
         <module>modules/hydra-client</module>
         <module>modules/hydra-interface</module>
         <module>modules/hydra-manager</module>
