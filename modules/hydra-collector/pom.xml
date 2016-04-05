@@ -95,7 +95,7 @@
                     <daemons>
                         <daemon>
                             <id>hydra-collector</id>
-                            <mainClass>com.jd.bdp.hydra.collector.HydraCollector</mainClass>
+                            <mainClass>com.jd.bdp.hydra.collector.HydraCollectorMysql</mainClass>
                             <platforms>
                                 <platform>jsw</platform>
                             </platforms>
