@@ -13,8 +13,8 @@
 
     <name>HYDRA STORE</name>
     <modules>
-        <module>hydra-hbase</module>
-        <module>hydra-mysql</module>
+        <module>hydra-store-hbase</module>
+        <module>hydra-store-mysql</module>
         <module>hydra-store-interface</module>
     </modules>
 

@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hydra-hbase</artifactId>
+    <artifactId>hydra-store-hbase</artifactId>
     <packaging>jar</packaging>
 
     <name>HYDRA HBASE</name>

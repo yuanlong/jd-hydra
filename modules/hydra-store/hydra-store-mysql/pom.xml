@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hydra-mysql</artifactId>
+    <artifactId>hydra-store-mysql</artifactId>
     <packaging>jar</packaging>
 
     <name>HYDRA MYSQL</name>

@@ -22,11 +22,11 @@
         </dependency>
         <dependency>
             <groupId>com.jd.bdp</groupId>
-            <artifactId>hydra-hbase</artifactId>
+            <artifactId>hydra-store-hbase</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jd.bdp</groupId>
-            <artifactId>hydra-mysql</artifactId>
+            <artifactId>hydra-store-mysql</artifactId>
         </dependency>
         <dependency>
             <groupId>com.taobao.metamorphosis</groupId>

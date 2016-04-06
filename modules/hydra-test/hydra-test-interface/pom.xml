@@ -33,15 +33,15 @@
             <artifactId>spring-test</artifactId>
             <version>3.1.2.RELEASE</version>
         </dependency>
-        <!--针对hydra-mysql相关接口进行测试-->
+        <!--针对hydra-store-mysql相关接口进行测试-->
         <dependency>
             <groupId>com.jd.bdp</groupId>
-            <artifactId>hydra-mysql</artifactId>
+            <artifactId>hydra-store-mysql</artifactId>
         </dependency>
-        <!--针对hydra-hbase的测试-->
+        <!--针对hydra-store-hbase的测试-->
         <dependency>
             <groupId>com.jd.bdp</groupId>
-            <artifactId>hydra-hbase</artifactId>
+            <artifactId>hydra-store-hbase</artifactId>
         </dependency>
     </dependencies>
 
