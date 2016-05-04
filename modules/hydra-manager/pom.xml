@@ -104,7 +104,7 @@
                     <daemons>
                         <daemon>
                             <id>hydra-manager</id>
-                            <mainClass>com.jd.bdp.hydra.manager.HydraManager</mainClass>
+                            <mainClass>com.jd.bdp.hydra.manager.Main</mainClass>
                             <platforms>
                                 <platform>jsw</platform>
                             </platforms>
