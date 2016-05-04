@@ -28,16 +28,6 @@
             <groupId>com.jd.bdp</groupId>
             <artifactId>hydra-collector</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.jd.bdp</groupId>
-            <artifactId>hydra-collector-service</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.collections</groupId>
-                    <artifactId>google-collections</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!--引入场景一进行集成测试-->
         <dependency>
             <groupId>com.jd.bdp</groupId>
