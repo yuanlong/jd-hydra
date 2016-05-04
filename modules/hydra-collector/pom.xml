@@ -14,7 +14,29 @@
     <packaging>jar</packaging>
     <name>HYDRA COLLECTOR</name>
 
-
+    <profiles>
+        <!-- 开发环境 -->
+        <profile>
+            <id>develop</id>
+            <properties>
+                <env.type>develop</env.type>
+            </properties>
+        </profile>
+        <!--测试环境-->
+        <profile>
+            <id>test</id>
+            <properties>
+                <env.type>test</env.type>
+            </properties>
+        </profile>
+        <!-- 生产正式环境 -->
+        <profile>
+            <id>product</id>
+            <properties>
+                <env.type>product</env.type>
+            </properties>
+        </profile>
+    </profiles>
     <!--使用服务接口-->
     <dependencies>
         <dependency>
@@ -77,6 +99,14 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/config/</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources/config/${env.type}</directory>
+                <targetPath>${project.build.outputDirectory}/</targetPath>
+                <filtering>true</filtering>
             </resource>
         </resources>
         <plugins>
@@ -101,7 +131,7 @@
                     <repositoryName>lib</repositoryName>
                     <configurationDirectory>conf</configurationDirectory>
                     <copyConfigurationDirectory>true</copyConfigurationDirectory>
-                    <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+                    <configurationSourceDirectory>src/main/resources/config/${env.type}</configurationSourceDirectory>
                     <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
                     <target>${project.build.directory}</target>
                     <daemons>
