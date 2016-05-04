@@ -80,10 +80,12 @@
     </modules>
 
     <properties>
+        <maven.test.skip>true</maven.test.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <junit.version>4.9</junit.version>
-        <springframework-version>3.1.2.RELEASE</springframework-version>
+        <!--<springframework-version>3.1.2.RELEASE</springframework-version>-->
+        <springframework-version>3.2.9.RELEASE</springframework-version>
         <servlet.version>2.5</servlet.version>
         <jackson.version>1.9.10</jackson.version>
         <fastjson.version>1.1.28</fastjson.version>
@@ -270,7 +272,7 @@
             <dependency>
                 <groupId>org.apache.zookeeper</groupId>
                 <artifactId>zookeeper</artifactId>
-                <version>3.4.5</version>
+                <version>3.4.6</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
