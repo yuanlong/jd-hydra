@@ -1,3 +1,0 @@
-metaq.zk=192.168.199.166:2181
-metaq.topic=hydra
-metaq.zk.root=/meta
