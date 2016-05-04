@@ -137,7 +137,7 @@
                     <daemons>
                         <daemon>
                             <id>hydra-collector</id>
-                            <mainClass>com.jd.bdp.hydra.collector.Main</mainClass>
+                            <mainClass>com.jd.bdp.hydra.CollectorMain</mainClass>
                             <platforms>
                                 <platform>jsw</platform>
                             </platforms>
