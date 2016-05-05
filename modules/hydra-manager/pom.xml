@@ -138,7 +138,7 @@
                     <daemons>
                         <daemon>
                             <id>hydra-manager</id>
-                            <mainClass>com.jd.bdp.hydra.manager.Main</mainClass>
+                            <mainClass>com.jd.bdp.hydra.ManagerMain</mainClass>
                             <platforms>
                                 <platform>jsw</platform>
                             </platforms>

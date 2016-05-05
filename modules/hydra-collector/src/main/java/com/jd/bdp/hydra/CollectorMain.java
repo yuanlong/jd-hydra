@@ -1,7 +1,7 @@
-package com.jd.bdp.hydra.collector;
+package com.jd.bdp.hydra;
 
 
-public class Main {
+public class CollectorMain {
     public static void main(String[] args) {
         com.alibaba.dubbo.container.Main.main(args);
     }
