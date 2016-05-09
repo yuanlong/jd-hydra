@@ -75,6 +75,40 @@ public class TraceService implements RegisterService, CollectorService {
             return false;
     }
 
+    @Override
+    public boolean registerService(String serviceName) {
+        logger.info("*****" + serviceName);
+        String serviceId = null;
+        try {
+            serviceId = leaderService.registerClient(serviceName);
+        } catch (Exception e) {
+            logger.warn("[Hydra] client cannot regist service <" + serviceName + "> into the hydra system");
+        }
+        if (serviceId != null) {
+            logger.info("[Hydra] Registry ["+serviceName+"] option is ok!");
+            //更新本地注册信息
+            registerInfo.put(serviceName, serviceId);
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    @Override
+    public boolean registerService(List<String> services) {
+        // logger.info(name + " " + services);
+        try {
+            this.registerInfo = leaderService.registerClient(services);
+        } catch (Exception e) {
+            logger.warn("[Hydra] Client global config-info cannot regist into the hydra system");
+        }
+        if (registerInfo != null) {
+            logger.info("[Hydra] Global registry option is ok!");
+            isRegister = true;
+        }
+        return isRegister;
+    }
+
     public LeaderService getLeaderService() {
         return leaderService;
     }

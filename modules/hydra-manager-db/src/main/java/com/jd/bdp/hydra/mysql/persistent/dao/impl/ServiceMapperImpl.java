@@ -45,6 +45,12 @@ public class ServiceMapperImpl implements ServiceMapper {
         return (ServicePara) sqlSession.selectOne("getServiceByName", map);
     }
 
+    @Override
+    public ServicePara getService(String name) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        return (ServicePara) sqlSession.selectOne("getServiceByNameWithoutAppId", map);
+    }
 
     @Override
     public void deleteService(ServicePara servicePara) {
@@ -69,6 +75,11 @@ public class ServiceMapperImpl implements ServiceMapper {
     @Override
     public List<ServicePara> get(Integer appId) {
         return (List<ServicePara>)sqlSession.selectList("getServiceByAppId", appId);
+    }
+
+    @Override
+    public List<ServicePara> get() {
+        return (List<ServicePara>)sqlSession.selectList("getServiceWithoutAppId");
     }
 
     public void setSqlSession(SqlSessionTemplate sqlSession) {

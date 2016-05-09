@@ -27,5 +27,9 @@ import java.util.List;
  */
 public interface ServiceService {
     String getServiceId(String serviceName, String appName);
+    //FIXME add method
+    String getServiceId(String serviceName);
     List<ServicePara> get(Integer appId);
+    //FIXME add method
+    List<ServicePara> get();
 }

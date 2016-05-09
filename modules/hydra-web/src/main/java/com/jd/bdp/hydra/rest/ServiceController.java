@@ -36,6 +36,11 @@ public class ServiceController {
     public JSONArray testAjax(@PathVariable int appId) {
         return (JSONArray) JSONArray.toJSON(serviceService.get(appId));
     }
+    @RequestMapping("/noAppId")
+    @ResponseBody
+    public JSONArray testAjaxNoAppId() {
+        return (JSONArray) JSONArray.toJSON(serviceService.get());
+    }
 
     @Autowired
     private AppService appService;

@@ -33,6 +33,20 @@ public class LeaderServiceImpl implements LeaderService {
         return serviceService.getServiceId(service, name).toString();
     }
 
+    @Override
+    public Map<String, String> registerClient(List<String> services) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("seed", seedService.getSeed().toString());
+        for (String serviceName : services) {
+            map.put("serviceName", serviceService.getServiceId(serviceName));
+        }
+        return map;
+    }
+
+    @Override
+    public String registerClient(String service) {
+        return serviceService.getServiceId(service);
+    }
 
     private ServiceService serviceService;
     private SeedService seedService;

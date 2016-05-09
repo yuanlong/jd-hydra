@@ -48,6 +48,9 @@
     <select id="getServiceByName" parameterType="map" resultMap="ServiceResultMap">
         SELECT * FROM TB_PARA_SERVICE WHERE NAME =#{name} AND APP_ID = #{appId}
     </select>
+    <select id="getServiceByNameWithoutAppId" parameterType="map" resultMap="ServiceResultMap">
+        SELECT * FROM TB_PARA_SERVICE WHERE NAME =#{name}
+    </select>
     <!--删除所有Service-->
     <delete id="deleteAllService" parameterType="ServiceEntity">
         DELETE FROM TB_PARA_SERVICE
@@ -57,5 +60,7 @@
     <select id="getServiceByAppId" parameterType="int" resultMap="ServiceResultMap">
         SELECT * FROM TB_PARA_SERVICE WHERE APP_ID = #{appId}
     </select>
-
+    <select id="getServiceWithoutAppId" resultMap="ServiceResultMap">
+        SELECT * FROM TB_PARA_SERVICE
+    </select>
 </mapper>

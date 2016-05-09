@@ -106,8 +106,12 @@ angular.module('hydra.services.query', [])
                 if (myScope.query.selectApp){
                     appId = myScope.query.selectApp.id;
                 }
+                //FIXME add one line
+                appId = "1";
                 if (appId){
-                    myScope.query.serviceList = ServiceList.getAll({appId: appId}, function (serviceList) {
+                    // myScope.query.serviceList = ServiceList.getAll({appId: appId}, function (serviceList) {
+                    //FIXME mod
+                    myScope.query.serviceList = ServiceList.getAllNoAppId(function (serviceList) {
                         var serviceArray = [];
                         for (var i in serviceList) {
                             serviceArray.push(serviceList[i].name);

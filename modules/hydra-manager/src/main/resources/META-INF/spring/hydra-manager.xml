@@ -19,7 +19,7 @@
         <property name="seedService" ref="seedService"/>
         <property name="serviceService" ref="serviceService"/>
     </bean>
-    <dubbo:service interface="com.jd.bdp.hydra.dubbomonitor.LeaderService" ref="leaderService">
+    <dubbo:service interface="com.jd.bdp.hydra.dubbomonitor.LeaderService" ref="leaderService" version="0.0.1">
     </dubbo:service>
 
 </beans>

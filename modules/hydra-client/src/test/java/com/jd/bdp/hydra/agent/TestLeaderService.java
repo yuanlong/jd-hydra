@@ -26,4 +26,14 @@ public class TestLeaderService implements LeaderService{
     public String registerClient(String name, String service) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public Map<String, String> registerClient(List<String> services) {
+        return null;
+    }
+
+    @Override
+    public String registerClient(String service) {
+        return null;
+    }
 }

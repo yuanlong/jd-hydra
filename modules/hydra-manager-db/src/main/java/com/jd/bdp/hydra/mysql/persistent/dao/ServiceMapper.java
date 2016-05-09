@@ -32,6 +32,8 @@ public interface ServiceMapper {
 
     //根据name查找ServicePara
     ServicePara getService(String name, Integer appId);
+    //FIXME add method
+    ServicePara getService(String name);
 
     /*删除一个应用*/
     void deleteService(ServicePara servicePara);
@@ -48,4 +50,6 @@ public interface ServiceMapper {
 
     //根据appId查找
     List<ServicePara> get(Integer appId);
+    //FIXME add method
+    List<ServicePara> get();
 }

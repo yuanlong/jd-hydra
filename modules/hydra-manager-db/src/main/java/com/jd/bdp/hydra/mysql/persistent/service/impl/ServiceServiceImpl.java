@@ -53,8 +53,27 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
+    public String getServiceId(String serviceName) {
+        ServicePara service = serviceMapper.getService(serviceName);
+        if (service == null) {
+            service = new ServicePara();
+            service.setId(serviceIdGenService.getNewServiceId());
+            service.setName(serviceName);
+            serviceMapper.addService(service);
+            return service.getId();
+        } else {
+            return service.getId();
+        }
+    }
+
+    @Override
     public List<ServicePara> get(Integer appId) {
         return serviceMapper.get(appId);
+    }
+
+    @Override
+    public List<ServicePara> get() {
+        return serviceMapper.get();
     }
 
     private ServiceMapper serviceMapper;

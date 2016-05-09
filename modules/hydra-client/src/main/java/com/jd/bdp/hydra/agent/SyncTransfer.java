@@ -17,5 +17,6 @@ public interface SyncTransfer{
     public void cancel();
     public void syncSend(Span span);
     public void setTraceService(TraceService traceService);
-    public String appName();
+//FIXME delete app
+//    public String appName();
 }

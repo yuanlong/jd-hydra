@@ -20,6 +20,12 @@ angular.module('hydra.repository.service', ['ngResource'])
             getAll: {method: 'GET', isArray: true}
         });
     })
+    //FIXME add method
+    .factory('ServiceList', function ($resource) {
+        return $resource(ctp + '/rest/service/noAppId', {}, {
+            getAllNoAppId: {method: 'GET', isArray: true}
+        });
+    })
     .factory('AppList', function ($resource) {
         return $resource(ctp + '/rest/service/appList', {}, {
             getAll: {method: 'GET', isArray: true}
