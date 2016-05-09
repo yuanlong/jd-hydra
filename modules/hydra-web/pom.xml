@@ -14,6 +14,29 @@
 
     <name>HYDRA WEB</name>
 
+    <profiles>
+        <!-- 开发环境 -->
+        <profile>
+            <id>develop</id>
+            <properties>
+                <env.type>develop</env.type>
+            </properties>
+        </profile>
+        <!--测试环境-->
+        <profile>
+            <id>test</id>
+            <properties>
+                <env.type>test</env.type>
+            </properties>
+        </profile>
+        <!-- 生产正式环境 -->
+        <profile>
+            <id>product</id>
+            <properties>
+                <env.type>product</env.type>
+            </properties>
+        </profile>
+    </profiles>
     <dependencies>
         <dependency>
             <groupId>com.jd.bdp</groupId>
@@ -101,5 +124,19 @@
 
     <build>
         <finalName>hydra-web</finalName>
+        <defaultGoal>package</defaultGoal>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/config/</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources/config/${env.type}</directory>
+                <targetPath>${project.build.outputDirectory}/</targetPath>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 </project>
