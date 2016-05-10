@@ -4,12 +4,6 @@
     <script language="javascript" type="text/javascript">
         var ctp = "<%=request.getContextPath() %>";
         var isFirst = true;
-        function serviceNameFocus(){
-            if(isFirst){
-                query.appChange();
-            }
-            isFirst = false;
-        }
     </script>
     <link href="<%=request.getContextPath() %>/statics/lib/bootstrap/datetimepicker/css/datetimepicker.css" rel="stylesheet" media="screen">
     <link href="<%=request.getContextPath() %>/statics/lib/DataTables-1.9.4/media/css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
