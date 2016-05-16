@@ -54,12 +54,6 @@ public class DefaultSyncTransfer implements SyncTransfer {
         this.executors = Executors.newSingleThreadScheduledExecutor();
         this.task = new TransferTask();
     }
-//FIXME delete app
-//    @Override
-//    public String appName() {
-//        //fixme
-//        return "test";
-//    }
 
     private class TransferTask extends Thread {
         TransferTask() {
@@ -72,8 +66,6 @@ public class DefaultSyncTransfer implements SyncTransfer {
                 try {
                     if (!isReady()) {//重试直到注册成功
                         //全局信息网络注册，输入流：应用名 @ 输出流：包含种子的Map对象
-//                        boolean r = traceService.registerService(appName(), new ArrayList<String>());
-                        //FIXME appName
                         boolean r = traceService.registerService(new ArrayList<String>());
                         if (r) {
                             generateTraceId = new GenerateTraceId(traceService.getSeed());
@@ -88,8 +80,6 @@ public class DefaultSyncTransfer implements SyncTransfer {
                             //检查是否有未注册服务，先注册
                             for (Map.Entry<String, Boolean> entry : isServiceReady.entrySet()) {
                                 if (false == entry.getValue()) {//没有注册，先注册
-//                                    boolean r = traceService.registerService(appName(), entry.getKey());
-                                    //FIXME appName
                                     boolean r = traceService.registerService(entry.getKey());
                                     if (r) {
                                         entry.setValue(true);

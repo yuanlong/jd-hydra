@@ -3,7 +3,6 @@
 <head>
     <script language="javascript" type="text/javascript">
         var ctp = "<%=request.getContextPath() %>";
-        var isFirst = true;
     </script>
     <link href="<%=request.getContextPath() %>/statics/lib/bootstrap/datetimepicker/css/datetimepicker.css" rel="stylesheet" media="screen">
     <link href="<%=request.getContextPath() %>/statics/lib/DataTables-1.9.4/media/css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
@@ -39,19 +38,19 @@
                 </thead>
                 <tbody>
                 <%--FIXME display:none app select--%>
-                <tr style="display: none;">
+                <%--<tr style="display: none;">
                     <td style="width: 120px;text-align: center;">所属应用:</td>
                     <td>
-                        <select id="appselectid" style="width: 100%;" ng-model="query.selectApp"
+                        <select style="width: 100%;" ng-model="query.selectApp"
                                 ng-options="app.name for app in query.appList" ng-change="query.appChange()">
                             <option value="">选择一个应用</option>
                         </select>
                     </td>
-                </tr>
+                </tr>--%>
                 <tr>
                     <td style="text-align: center;">服务名:</td>
                     <td>
-                        <input onfocus="if(isFirst){$('#appselectid').trigger('change')};isFirst=false;" id="serviceName" type="text" data-provide="typeahead" style="height: 30px;" required/>
+                        <input id="serviceName" ng-init="query.queryServices()" type="text" data-provide="typeahead" style="height: 30px;" required/>
                     </td>
                 </tr>
                 <tr>

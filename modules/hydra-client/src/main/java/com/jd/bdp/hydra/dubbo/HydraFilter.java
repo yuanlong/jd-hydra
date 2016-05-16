@@ -86,8 +86,6 @@ public class HydraFilter implements Filter {
                 if (span1 == null) { //为rootSpan
                     span = tracer.newSpan(context.getMethodName(), endpoint, serviceId);//生成root Span
                 } else {
-//                    span = tracer.genSpan(span1.getTraceId(), span1.getId(), tracer.genSpanId(), context.getMethodName(), span1.isSample(), null);
-                    // FIXME: 2016-05-06 加入 serviceId
                     span = tracer.genSpan(span1.getTraceId(), span1.getId(), tracer.genSpanId(), context.getMethodName(), span1.isSample(), serviceId);
                 }
             } else if (context.isProviderSide()) {

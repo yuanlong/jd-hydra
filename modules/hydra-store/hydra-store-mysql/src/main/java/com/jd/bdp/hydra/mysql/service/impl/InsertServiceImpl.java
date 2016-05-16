@@ -28,8 +28,6 @@ public class InsertServiceImpl implements InsertService {
 
     @Override
     public void addTrace(Span span) {
-        //FIXME add all trace
-//        if (Utils.isTopAnntation(span) && Utils.isRoot(span)) {
         if (Utils.isTopAnntation(span)) {
             Annotation annotation = Utils.getCrAnnotation(span.getAnnotations());
             Annotation annotation1 = Utils.getCsAnnotation(span.getAnnotations());

@@ -26,10 +26,6 @@ import java.util.List;
  * Time: 下午1:17
  */
 public interface ServiceService {
-    String getServiceId(String serviceName, String appName);
-    //FIXME add method
     String getServiceId(String serviceName);
-    List<ServicePara> get(Integer appId);
-    //FIXME add method
     List<ServicePara> get();
 }

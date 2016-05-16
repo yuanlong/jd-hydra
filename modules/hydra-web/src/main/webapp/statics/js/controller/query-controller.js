@@ -16,7 +16,7 @@
 'use strict';
 function QueryCtrl($scope, $filter, $location,//内置
                    queryService, sequenceService, treeService,//service
-                   TraceList, TraceListEx, AppList, ServiceList, Trace) {//repository
+                   TraceList, TraceListEx, ServiceList, Trace) {//repository
     $scope.env = {
         windowWidth : window.screen.width,
         queryDivStyle: {width: function () {
@@ -72,7 +72,8 @@ function QueryCtrl($scope, $filter, $location,//内置
                 query.queryBtn.name = '查询';
             }
         },
-        appList: AppList.getAll(),
+        //FIXME delete app
+        // appList: AppList.getAll(),
         serviceList: [],
         sum: 500,
         submitQuery: function () {
@@ -127,8 +128,11 @@ function QueryCtrl($scope, $filter, $location,//内置
 
             }
         },
-        appChange: function () {
-            queryService.appChange($scope);
+        // appChange: function () {
+        //     queryService.appChange($scope);
+        // },
+        queryServices: function () {
+            queryService.getAllServices($scope);
         },
         durationChange: function () {
             $scope.query.exBtn.type = false;
