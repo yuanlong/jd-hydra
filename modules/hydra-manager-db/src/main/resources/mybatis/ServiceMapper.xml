@@ -20,7 +20,6 @@
 <mapper namespace="com.jd.bdp.hydra.mysql.persistent.dao.ServiceMapper">
 
     <resultMap id="ServiceResultMap" type="ServiceEntity">
-        <result property="appId" column="APP_ID" />
     </resultMap>
 
     <!--新增加一个Service-->
