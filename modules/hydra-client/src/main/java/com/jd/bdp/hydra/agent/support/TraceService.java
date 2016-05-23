@@ -24,7 +24,6 @@ public class TraceService implements RegisterService, CollectorService {
     private LeaderService leaderService;
     private HydraService hydraService;
     private Map<String, String> registerInfo;
-    public static final String APP_NAME = "applicationName";
     public static final String SEED = "seed";
     private boolean isRegister = false;
 
@@ -42,11 +41,31 @@ public class TraceService implements RegisterService, CollectorService {
         }
     }
 
+
     @Override
-    public boolean registerService(String name, List<String> services) {
-       // logger.info(name + " " + services);
+    public boolean registerService(String serviceName) {
+        logger.info("*****" + serviceName);
+        String serviceId = null;
         try {
-            this.registerInfo = leaderService.registerClient(name, services);
+            serviceId = leaderService.registerClient(serviceName);
+        } catch (Exception e) {
+            logger.warn("[Hydra] client cannot regist service <" + serviceName + "> into the hydra system");
+        }
+        if (serviceId != null) {
+            logger.info("[Hydra] Registry ["+serviceName+"] option is ok!");
+            //更新本地注册信息
+            registerInfo.put(serviceName, serviceId);
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    @Override
+    public boolean registerService(List<String> services) {
+        // logger.info(name + " " + services);
+        try {
+            this.registerInfo = leaderService.registerClient(services);
         } catch (Exception e) {
             logger.warn("[Hydra] Client global config-info cannot regist into the hydra system");
         }
@@ -55,24 +74,6 @@ public class TraceService implements RegisterService, CollectorService {
             isRegister = true;
         }
         return isRegister;
-    }
-
-    /*更新注册信息*/
-    @Override
-    public boolean registerService(String appName, String serviceName) {
-        logger.info(appName + " " + serviceName);
-        String serviceId = null;
-        try {
-            serviceId = leaderService.registerClient(appName, serviceName);
-        } catch (Exception e) {
-            logger.warn("[Hydra] client cannot regist service <" + serviceName + "> into the hydra system");
-        }
-        if (serviceId != null) {
-            logger.info("[Hydra] Registry ["+serviceName+"] option is ok!");
-            registerInfo.put(serviceName, serviceId); //更新本地注册信息
-            return true;
-        } else
-            return false;
     }
 
     public LeaderService getLeaderService() {

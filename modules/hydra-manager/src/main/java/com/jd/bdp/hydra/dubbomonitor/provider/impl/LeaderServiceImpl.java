@@ -1,7 +1,6 @@
 package com.jd.bdp.hydra.dubbomonitor.provider.impl;
 
 import com.jd.bdp.hydra.dubbomonitor.LeaderService;
-import com.jd.bdp.hydra.mysql.persistent.service.AppService;
 import com.jd.bdp.hydra.mysql.persistent.service.SeedService;
 import com.jd.bdp.hydra.mysql.persistent.service.ServiceService;
 
@@ -17,26 +16,22 @@ import java.util.Map;
 public class LeaderServiceImpl implements LeaderService {
 
     @Override
-    public Map<String, String> registerClient(String name, List<String> services) {
-        long startTime=System.currentTimeMillis();
-        HashMap<String, String> map = new HashMap<String, String>();
+    public Map<String, String> registerClient(List<String> services) {
+        HashMap<String, String> map = new HashMap<>();
         map.put("seed", seedService.getSeed().toString());
-        map.put(name, appService.getAppId(name).toString());
         for (String serviceName : services) {
-            map.put("serviceName", serviceService.getServiceId(serviceName, name).toString());
+            map.put("serviceName", serviceService.getServiceId(serviceName));
         }
         return map;
     }
 
     @Override
-    public String registerClient(String name, String service) {
-        return serviceService.getServiceId(service, name).toString();
+    public String registerClient(String service) {
+        return serviceService.getServiceId(service);
     }
-
 
     private ServiceService serviceService;
     private SeedService seedService;
-    private AppService appService;
 
     public void setServiceService(ServiceService serviceService) {
         this.serviceService = serviceService;
@@ -46,7 +41,4 @@ public class LeaderServiceImpl implements LeaderService {
         this.seedService = seedService;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
-    }
 }

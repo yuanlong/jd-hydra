@@ -20,6 +20,9 @@
             <properties>
                 <env.type>develop</env.type>
             </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
         <!--测试环境-->
         <profile>

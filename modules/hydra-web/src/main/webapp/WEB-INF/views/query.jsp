@@ -37,7 +37,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <%--FIXME display:none app select--%>
+                <%--<tr style="display: none;">
                     <td style="width: 120px;text-align: center;">所属应用:</td>
                     <td>
                         <select style="width: 100%;" ng-model="query.selectApp"
@@ -45,11 +46,11 @@
                             <option value="">选择一个应用</option>
                         </select>
                     </td>
-                </tr>
+                </tr>--%>
                 <tr>
                     <td style="text-align: center;">服务名:</td>
                     <td>
-                        <input id="serviceName" type="text" data-provide="typeahead" style="height: 30px;" required/>
+                        <input id="serviceName" ng-init="query.queryServices()" type="text" data-provide="typeahead" style="height: 30px;" required/>
                     </td>
                 </tr>
                 <tr>

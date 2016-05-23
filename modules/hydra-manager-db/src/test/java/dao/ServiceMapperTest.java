@@ -17,9 +17,7 @@
 package dao;
 
 
-import com.jd.bdp.hydra.mysql.persistent.dao.AppMapper;
 import com.jd.bdp.hydra.mysql.persistent.dao.ServiceMapper;
-import com.jd.bdp.hydra.mysql.persistent.entity.AppPara;
 import com.jd.bdp.hydra.mysql.persistent.entity.ServicePara;
 import org.junit.Test;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
@@ -50,15 +48,10 @@ public class ServiceMapperTest extends AbstractDependencyInjectionSpringContextT
     @Test
     public void testDataBaseOption()throws Exception{
         try {
-            AppPara app = new AppPara();
-            app.setName("myApp");
-            appMapper.addApp(app);
-
             //define option-entity and query-entiry
             ServicePara servicePara=new ServicePara();
             servicePara.setId("1");
             servicePara.setName("com.jd.car");
-            servicePara.setAppId(app.getId());
             ServicePara queryPara=null;
             //add entity
             serviceMapper.addService(servicePara);
@@ -80,7 +73,6 @@ public class ServiceMapperTest extends AbstractDependencyInjectionSpringContextT
             //delete entity
             try {
                 serviceMapper.deleteAll();
-                appMapper.deleteAll();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -92,22 +84,15 @@ public class ServiceMapperTest extends AbstractDependencyInjectionSpringContextT
     @Test
     public void testFindByName(){
         try {
-            AppPara app = new AppPara();
-            app.setName("myApp");
-            appMapper.addApp(app);
-            Integer appId = app.getId();
-
             ServicePara servicePara1 = new ServicePara();
             servicePara1.setId("1");
             servicePara1.setName("myService1");
-            servicePara1.setAppId(app.getId());
 
             serviceMapper.addService(servicePara1);
 
             ServicePara servicePara2 = new ServicePara();
             servicePara2.setId("2");
             servicePara2.setName("myService2");
-            servicePara2.setAppId(appId);
 
             serviceMapper.addService(servicePara2);
 
@@ -118,29 +103,23 @@ public class ServiceMapperTest extends AbstractDependencyInjectionSpringContextT
             assertNotNull(id1);
             assertNotNull(id2);
 
-            ServicePara s1 = serviceMapper.getService("myService1", appId);
-            ServicePara s2 = serviceMapper.getService("myService2", appId);
+            ServicePara s1 = serviceMapper.getService("myService1");
+            ServicePara s2 = serviceMapper.getService("myService2");
 
             assertEquals(id1, s1.getId());
             assertEquals(id2, s2.getId());
-            assertEquals(appId, s1.getAppId());
         }catch (Exception e){
            e.printStackTrace();
         }finally {
             //最后删除所有的测试数据
             serviceMapper.deleteAll();
-            appMapper.deleteAll();
         }
     }
 
     private ServiceMapper serviceMapper;
-    private AppMapper appMapper;
 
     public void setServerMapper(ServiceMapper serviceMapper) {
         this.serviceMapper = serviceMapper;
     }
 
-    public void setAppMapper(AppMapper appMapper) {
-        this.appMapper = appMapper;
-    }
 }

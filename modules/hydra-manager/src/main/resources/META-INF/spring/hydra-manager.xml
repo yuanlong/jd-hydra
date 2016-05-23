@@ -15,11 +15,10 @@
     <!-- 用dubbo协议在20880端口暴露服务 -->
     <dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" />
     <bean id="leaderService" class="com.jd.bdp.hydra.dubbomonitor.provider.impl.LeaderServiceImpl">
-        <property name="appService" ref="appService"/>
         <property name="seedService" ref="seedService"/>
         <property name="serviceService" ref="serviceService"/>
     </bean>
-    <dubbo:service interface="com.jd.bdp.hydra.dubbomonitor.LeaderService" ref="leaderService">
+    <dubbo:service interface="com.jd.bdp.hydra.dubbomonitor.LeaderService" ref="leaderService" version="0.0.1">
     </dubbo:service>
 
 </beans>

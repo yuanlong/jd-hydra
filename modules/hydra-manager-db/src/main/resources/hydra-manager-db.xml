@@ -70,9 +70,6 @@
         <constructor-arg index="0" ref="sqlSessionFactoryManager"/>
     </bean>
 
-    <bean id="appMapper" class="com.jd.bdp.hydra.mysql.persistent.dao.impl.AppMapperImpl">
-        <property name="sqlSession" ref="sqlSessionTemplateManager"/>
-    </bean>
     <bean id="serviceMapper" class="com.jd.bdp.hydra.mysql.persistent.dao.impl.ServiceMapperImpl">
         <property name="sqlSession" ref="sqlSessionTemplateManager"/>
     </bean>
@@ -83,12 +80,8 @@
         <property name="sqlSession" ref="sqlSessionTemplateManager"/>
     </bean>
 
-    <bean id="appService" class="com.jd.bdp.hydra.mysql.persistent.service.impl.AppServiceImpl">
-        <property name="appMapper" ref="appMapper"/>
-    </bean>
     <bean id="serviceService" class="com.jd.bdp.hydra.mysql.persistent.service.impl.ServiceServiceImpl">
         <property name="serviceMapper" ref="serviceMapper"/>
-        <property name="appMapper" ref="appMapper"/>
         <property name="serviceIdGenService" ref="serviceIdGenService"/>
     </bean>
     <bean id="seedService" class="com.jd.bdp.hydra.mysql.persistent.service.impl.SeedServiceImpl">

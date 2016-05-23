@@ -38,13 +38,11 @@ public class ServiceMapperImpl implements ServiceMapper {
     }
 
     @Override
-    public ServicePara getService(String name, Integer appId) {
-        Map<String, Object> map = new HashMap<String, Object>();
+    public ServicePara getService(String name) {
+        Map<String, Object> map = new HashMap<>();
         map.put("name", name);
-        map.put("appId", appId);
         return (ServicePara) sqlSession.selectOne("getServiceByName", map);
     }
-
 
     @Override
     public void deleteService(ServicePara servicePara) {
@@ -67,8 +65,8 @@ public class ServiceMapperImpl implements ServiceMapper {
     }
 
     @Override
-    public List<ServicePara> get(Integer appId) {
-        return (List<ServicePara>)sqlSession.selectList("getServiceByAppId", appId);
+    public List<ServicePara> get() {
+        return (List<ServicePara>)sqlSession.selectList("getAllService");
     }
 
     public void setSqlSession(SqlSessionTemplate sqlSession) {
