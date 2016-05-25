@@ -33,10 +33,10 @@
             <artifactId>spring-test</artifactId>
             <version>3.1.2.RELEASE</version>
         </dependency>
-        <!--针对hydra-store-mysql相关接口进行测试-->
+        <!--针对hydra-store相关接口进行测试-->
         <dependency>
             <groupId>com.jd.bdp</groupId>
-            <artifactId>hydra-store-mysql</artifactId>
+            <artifactId>hydra-store</artifactId>
         </dependency>
     </dependencies>
 

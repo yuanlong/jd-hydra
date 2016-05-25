@@ -7,8 +7,6 @@ import com.jd.bdp.hydra.BinaryAnnotation;
 import com.jd.bdp.hydra.Endpoint;
 import com.jd.bdp.hydra.Span;
 import com.jd.bdp.hydra.agent.support.*;
-import com.jd.bdp.hydra.dubbomonitor.HydraService;
-import com.jd.bdp.hydra.dubbomonitor.LeaderService;
 
 /**
  * Date: 13-3-19
@@ -67,14 +65,6 @@ public class Tracer {
         span.setSpanName(spanname);
         span.setServiceId(serviceId);
         span.setSample(s);
-//        if (s) {//应用名写入
-//            BinaryAnnotation appname = new BinaryAnnotation();
-//            appname.setKey("dubbo.applicationName");
-//            appname.setValue(transfer.appName().getBytes());
-//            appname.setType("string");
-//            appname.setHost(endpoint);
-//            span.addBinaryAnnotation(appname);
-//        }
         return span;
     }
 

@@ -11,7 +11,7 @@ public class StartManager {
     public static void main(String[] args)  {
         try {
             ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{
-                    "classpath*:META-INF/spring/hydra-manager.xml"
+                    "classpath*:META-INF/spring/hydra-register.xml"
             });
             context.start();
             Thread.sleep(999999999);

@@ -22,7 +22,7 @@
         </dependency>
         <dependency>
             <groupId>com.jd.bdp</groupId>
-            <artifactId>hydra-manager</artifactId>
+            <artifactId>hydra-register</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jd.bdp</groupId>

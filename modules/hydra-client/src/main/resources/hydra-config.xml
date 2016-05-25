@@ -13,7 +13,7 @@
         <property name="queueSize" value="1024"></property>
     </bean>
     <!--leadService-->
-    <dubbo:reference id="leaderService" interface="com.jd.bdp.hydra.dubbomonitor.LeaderService" check="false"
+    <dubbo:reference id="leaderService" interface="com.jd.bdp.hydra.dubbomonitor.RegisterService" check="false"
                      filter="-hydra" timeout="2000" version="0.0.1">
     </dubbo:reference>
     <!--hydraService-->
@@ -23,7 +23,7 @@
 
     <bean id="traceService" class="com.jd.bdp.hydra.agent.support.TraceService">
         <property name="hydraService" ref="hydraService"></property>
-        <property name="leaderService" ref="leaderService"></property>
+        <property name="registerService" ref="leaderService"></property>
     </bean>
     <bean id="transfer" class="com.jd.bdp.hydra.agent.support.DefaultSyncTransfer">
         <property name="traceService" ref="traceService"/>

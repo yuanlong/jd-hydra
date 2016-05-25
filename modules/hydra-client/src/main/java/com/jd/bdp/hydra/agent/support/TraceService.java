@@ -3,13 +3,11 @@ package com.jd.bdp.hydra.agent.support;
 
 import com.jd.bdp.hydra.Span;
 import com.jd.bdp.hydra.agent.CollectorService;
-import com.jd.bdp.hydra.agent.RegisterService;
 import com.jd.bdp.hydra.dubbomonitor.HydraService;
-import com.jd.bdp.hydra.dubbomonitor.LeaderService;
+import com.jd.bdp.hydra.dubbomonitor.RegisterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +15,11 @@ import java.util.Map;
  * Date: 13-3-27
  * Time: 上午10:57
  */
-public class TraceService implements RegisterService, CollectorService {
+public class TraceService implements com.jd.bdp.hydra.agent.RegisterService, CollectorService {
 
     private static final Logger logger = LoggerFactory.getLogger(TraceService.class);
 
-    private LeaderService leaderService;
+    private RegisterService registerService;
     private HydraService hydraService;
     private Map<String, String> registerInfo;
     public static final String SEED = "seed";
@@ -47,7 +45,7 @@ public class TraceService implements RegisterService, CollectorService {
         logger.info("*****" + serviceName);
         String serviceId = null;
         try {
-            serviceId = leaderService.registerClient(serviceName);
+            serviceId = registerService.registerClient(serviceName);
         } catch (Exception e) {
             logger.warn("[Hydra] client cannot regist service <" + serviceName + "> into the hydra system");
         }
@@ -65,7 +63,7 @@ public class TraceService implements RegisterService, CollectorService {
     public boolean registerService(List<String> services) {
         // logger.info(name + " " + services);
         try {
-            this.registerInfo = leaderService.registerClient(services);
+            this.registerInfo = registerService.registerClient(services);
         } catch (Exception e) {
             logger.warn("[Hydra] Client global config-info cannot regist into the hydra system");
         }
@@ -76,12 +74,12 @@ public class TraceService implements RegisterService, CollectorService {
         return isRegister;
     }
 
-    public LeaderService getLeaderService() {
-        return leaderService;
+    public RegisterService getRegisterService() {
+        return registerService;
     }
 
-    public void setLeaderService(LeaderService leaderService) {
-        this.leaderService = leaderService;
+    public void setRegisterService(RegisterService registerService) {
+        this.registerService = registerService;
     }
 
     public HydraService getHydraService() {

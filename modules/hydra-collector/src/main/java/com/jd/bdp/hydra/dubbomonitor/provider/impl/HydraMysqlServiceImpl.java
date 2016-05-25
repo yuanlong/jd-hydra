@@ -3,7 +3,7 @@ package com.jd.bdp.hydra.dubbomonitor.provider.impl;
 import com.jd.bdp.hydra.Span;
 import com.jd.bdp.hydra.dubbomonitor.HydraService;
 import com.jd.bdp.hydra.dubbomonitor.provider.impl.support.Configuration;
-import com.jd.bdp.hydra.store.inter.InsertService;
+import com.jd.bdp.hydra.store.InsertService;
 
 import java.io.IOException;
 import java.util.List;
