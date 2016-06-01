@@ -17,11 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * User: biandi
- * Date: 13-5-9
- * Time: 下午4:13
- */
 public class QueryServiceImpl implements QueryService {
 
     @Override
@@ -30,7 +25,7 @@ public class QueryServiceImpl implements QueryService {
             List<Span> spans = spanMapper.findSpanByTraceId(traceId);
             List<Absannotation> annotations = annotationMapper.getAnnotations(spans);
             return assembleTrace(spans, annotations);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -38,10 +33,10 @@ public class QueryServiceImpl implements QueryService {
 
     private JSONObject assembleTrace(List<Span> spans, List<Absannotation> annotations) {
         JSONObject trace = new JSONObject();
-        Map<Long, JSONObject> spanMap = new HashMap<Long, JSONObject>();
+        Map<String, JSONObject> spanMap = new HashMap<String, JSONObject>();
 
         for (Span span : spans) {
-            spanMap.put(span.getId(), (JSONObject) JSON.toJSON(span));
+            spanMap.put(span.getSpanId(), (JSONObject) JSON.toJSON(span));
         }
 
         for (Absannotation annotation : annotations) {
@@ -61,7 +56,7 @@ public class QueryServiceImpl implements QueryService {
         }
 
         boolean isAvailable = true;
-        for (Map.Entry<Long, JSONObject> entry : spanMap.entrySet()) {
+        for (Map.Entry<String, JSONObject> entry : spanMap.entrySet()) {
             JSONObject mySpan = entry.getValue();
             if (!mySpan.containsKey("parentId") || mySpan.get("parentId") == null) {
                 trace.put("rootSpan", mySpan);
@@ -145,7 +140,7 @@ public class QueryServiceImpl implements QueryService {
         JSONArray array = new JSONArray();
         for (Trace trace : list) {
             JSONObject obj = new JSONObject();
-            obj.put("serviceId", trace.getService());
+            obj.put("serviceId", trace.getServiceId());
             obj.put("timestamp", trace.getTime());
             obj.put("duration", trace.getDuration());
             obj.put("traceId", trace.getTraceId());
@@ -160,7 +155,7 @@ public class QueryServiceImpl implements QueryService {
         JSONArray array = new JSONArray();
         for (Trace trace : list) {
             JSONObject obj = new JSONObject();
-            obj.put("serviceId", trace.getService());
+            obj.put("serviceId", trace.getServiceId());
             obj.put("timestamp", trace.getTime());
             obj.put("exInfo", trace.getAnnValue());
             obj.put("traceId", trace.getTraceId());
@@ -184,6 +179,4 @@ public class QueryServiceImpl implements QueryService {
     public void setAnnotationMapper(AnnotationMapper annotationMapper) {
         this.annotationMapper = annotationMapper;
     }
-
-
 }

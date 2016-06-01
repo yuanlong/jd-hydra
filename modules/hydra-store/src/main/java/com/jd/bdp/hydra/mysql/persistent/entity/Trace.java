@@ -17,27 +17,22 @@
 package com.jd.bdp.hydra.mysql.persistent.entity;
 
 /**
- * User: biandi
- * Date: 13-5-8
- * Time: 下午3:34
+ * User: biandi Date: 13-5-8 Time: 下午3:34
  */
 public class Trace {
-
-    private Integer id;
+    private String traceId;
     private Long time;
-    private Long traceId;
     private Integer duration;
-    private String service;
-
+    private String serviceId;
     //查询用
     private String annValue;
 
-    public Integer getId() {
-        return id;
+    public String getTraceId() {
+        return traceId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
     }
 
     public Long getTime() {
@@ -48,14 +43,6 @@ public class Trace {
         this.time = time;
     }
 
-    public Long getTraceId() {
-        return traceId;
-    }
-
-    public void setTraceId(Long traceId) {
-        this.traceId = traceId;
-    }
-
     public Integer getDuration() {
         return duration;
     }
@@ -64,12 +51,12 @@ public class Trace {
         this.duration = duration;
     }
 
-    public String getService() {
-        return service;
+    public String getServiceId() {
+        return serviceId;
     }
 
-    public void setService(String service) {
-        this.service = service;
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 
     public String getAnnValue() {

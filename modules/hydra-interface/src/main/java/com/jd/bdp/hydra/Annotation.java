@@ -2,35 +2,62 @@ package com.jd.bdp.hydra;
 
 import java.io.Serializable;
 
-/**
- * Date: 13-3-18
- * Time: 下午3:36
- */
 public class Annotation implements Serializable {
-    public static final String CLIENT_SEND = "cs";
-    public static final String CLIENT_RECEIVE = "cr";
-    public static final String SERVER_SEND = "ss";
-    public static final String SERVER_RECEIVE = "sr";
-    private Long timestamp;
+    private static final long serialVersionUID = 1840245774768176307L;
+    private long annotationId;
+    private String type;
+    private String ip;
+    private int port;
+    private Long time;
+    private String spanId;
     private String value;
-    private Endpoint host;
-    private Integer duration;
 
-    public Annotation(){
-
-    }
-    public Annotation(Long timestamp, String value, Endpoint host) {
-        this.timestamp = timestamp;
-        this.value = value;
-        this.host = host;
+    public long getAnnotationId() {
+        return annotationId;
     }
 
-    public Long getTimestamp() {
-        return timestamp;
+    public void setAnnotationId(long annotationId) {
+        this.annotationId = annotationId;
     }
 
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
+    }
+
+    public String getSpanId() {
+        return spanId;
+    }
+
+    public void setSpanId(String spanId) {
+        this.spanId = spanId;
     }
 
     public String getValue() {
@@ -41,53 +68,16 @@ public class Annotation implements Serializable {
         this.value = value;
     }
 
-    public Endpoint getHost() {
-        return host;
-    }
-
-    public void setHost(Endpoint host) {
-        this.host = host;
-    }
-
-    public Integer getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
-    }
-
     @Override
     public String toString() {
         return "Annotation{" +
-                "timestamp=" + timestamp +
+                "annotationId=" + annotationId +
+                ", type='" + type + '\'' +
+                ", ip='" + ip + '\'' +
+                ", port=" + port +
+                ", time=" + time +
+                ", spanId='" + spanId + '\'' +
                 ", value='" + value + '\'' +
-                ", host=" + host +
-                ", duration=" + duration +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Annotation)) return false;
-
-        Annotation that = (Annotation) o;
-
-        if (duration!=null&&!duration.equals(that.duration)) return false;
-        if (!host.equals(that.host)) return false;
-        if (!timestamp.equals(that.timestamp)) return false;
-        if (!value.equals(that.value)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = timestamp.hashCode();
-        result = 31 * result + value.hashCode();
-        result = 31 * result + host.hashCode();
-        result = 31 * result + duration.hashCode();
-        return result;
     }
 }
