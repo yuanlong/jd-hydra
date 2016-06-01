@@ -64,6 +64,7 @@ public class Tracer {
         annotation.setTime(start);
         annotation.setIp(ip);
         annotation.setPort(port);
+        annotation.setSpanId(span.getSpanId());
         span.addAnnotation(annotation);
     }
 
@@ -75,6 +76,7 @@ public class Tracer {
         annotation.setIp(ip);
         annotation.setPort(port);
         annotation.setTime(end);
+        annotation.setSpanId(span.getSpanId());
         span.addAnnotation(annotation);
         logger.info("ClientSpan------------------" + span.toString());
     }
@@ -86,6 +88,7 @@ public class Tracer {
         annotation.setIp(ip);
         annotation.setPort(port);
         annotation.setTime(start);
+        annotation.setSpanId(span.getSpanId());
         span.addAnnotation(annotation);
         spanThreadLocal.set(span);
     }
@@ -97,6 +100,7 @@ public class Tracer {
         annotation.setTime(end);
         annotation.setIp(ip);
         annotation.setPort(port);
+        annotation.setSpanId(span.getSpanId());
         span.addAnnotation(annotation);
         spanThreadLocal.remove();
         logger.info("ServerSpan------------------" + span.toString());
