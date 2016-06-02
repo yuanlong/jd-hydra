@@ -29,6 +29,7 @@ import com.jd.bdp.hydra.Annotation;
 import com.jd.bdp.hydra.AnnotationType;
 import com.jd.bdp.hydra.Span;
 import com.jd.bdp.hydra.agent.Tracer;
+import com.jd.bdp.hydra.agent.Transfer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,7 @@ public class HydraFilter implements Filter {
     public static final String SID = "spanId";
     public static final String PID = "parentId";
 
-    private Tracer tracer = Tracer.getTracer();
+    private static Tracer tracer = Tracer.getTracer();
 
     // 调用过程拦截
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
@@ -149,6 +150,8 @@ public class HydraFilter implements Filter {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{
                 resourceName
         });
+        Transfer transfer = (Transfer) context.getBean("transfer");
+        tracer.setTransfer(transfer);
         logger.info("Hydra config context is starting,config file path is:" + resourceName);
         context.start();
     }

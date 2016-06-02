@@ -2,7 +2,6 @@ package com.jd.bdp.hydra.dubbomonitor.provider.impl;
 
 import com.jd.bdp.hydra.Span;
 import com.jd.bdp.hydra.dubbomonitor.provider.impl.support.Configuration;
-import com.jd.bdp.hydra.store.InsertService;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,9 +41,6 @@ public class HydraMysqlServiceImpl {
                     List<Span> span = queue.take();
                     if (span != null) {
                         for (Span s : span) {
-                            insertService.addSpan(s);
-                            insertService.addTrace(s);
-                            insertService.addAnnotation(s);
                         }
                     }
                 } catch (InterruptedException e) {
@@ -56,17 +52,4 @@ public class HydraMysqlServiceImpl {
 
         }
     }
-
-    @Override
-    public boolean push(List<Span> span) throws IOException {
-        return queue.add(span);
-    }
-
-    private InsertService insertService;
-
-    public void setInsertService(InsertService insertService) {
-        this.insertService = insertService;
-    }
-
-
 }

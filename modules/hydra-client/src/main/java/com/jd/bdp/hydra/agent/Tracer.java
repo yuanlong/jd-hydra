@@ -10,8 +10,12 @@ import java.util.UUID;
 
 public class Tracer {
     private static final Logger logger = LoggerFactory.getLogger(Tracer.class);
-    private ThreadLocal<Span> spanThreadLocal = new ThreadLocal<Span>();
+    private static final ThreadLocal<Span> spanThreadLocal = new ThreadLocal<Span>();
+    private Transfer transfer;
 
+    public void setTransfer(Transfer transfer) {
+        this.transfer = transfer;
+    }
 
     private Tracer() {
     }
@@ -78,7 +82,7 @@ public class Tracer {
         annotation.setTime(end);
         annotation.setSpanId(span.getSpanId());
         span.addAnnotation(annotation);
-        logger.info("ClientSpan------------------" + span.toString());
+        transfer.send(span);
     }
 
     //sr annotation
@@ -103,7 +107,7 @@ public class Tracer {
         annotation.setSpanId(span.getSpanId());
         span.addAnnotation(annotation);
         spanThreadLocal.remove();
-        logger.info("ServerSpan------------------" + span.toString());
+        transfer.send(span);
     }
 
     public static String getId() {

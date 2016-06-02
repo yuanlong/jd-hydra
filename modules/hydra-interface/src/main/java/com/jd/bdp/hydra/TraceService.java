@@ -1,5 +1,7 @@
 package com.jd.bdp.hydra;
 
+import java.util.List;
+
 /**
  * @author:杨果
  * @date:16/5/26 下午2:17
@@ -8,9 +10,5 @@ package com.jd.bdp.hydra;
  *
  */
 public interface TraceService {
-    void insertTrace(Trace trace);
-
-    void insertSpan(Span span);
-
-    void insertAnnotation(Annotation annotation);
+    void sendSpan(List<Span> spans);
 }
