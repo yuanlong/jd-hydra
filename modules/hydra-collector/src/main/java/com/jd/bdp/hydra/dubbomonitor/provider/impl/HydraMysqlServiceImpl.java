@@ -1,20 +1,19 @@
 package com.jd.bdp.hydra.dubbomonitor.provider.impl;
 
-import com.jd.bdp.hydra.Span;
-import com.jd.bdp.hydra.dubbomonitor.HydraService;
-import com.jd.bdp.hydra.dubbomonitor.provider.impl.support.Configuration;
-import com.jd.bdp.hydra.store.inter.InsertService;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.jd.bdp.hydra.Span;
+import com.jd.bdp.hydra.dubbomonitor.HydraService;
+import com.jd.bdp.hydra.dubbomonitor.provider.impl.support.Configuration;
+import com.jd.bdp.hydra.store.inter.InsertService;
+
 public class HydraMysqlServiceImpl implements HydraService {
 
-    private ArrayBlockingQueue<List<Span>> queue;
+    private ArrayBlockingQueue<List<Span>> queue; //如果出现性能，可以应用disruptor来测试一下
     private int taskCount=3;
     private ExecutorService executors = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
@@ -28,7 +27,8 @@ public class HydraMysqlServiceImpl implements HydraService {
     }
 
     public HydraMysqlServiceImpl(Configuration c) {
-        int queueSize= c.getTaskCount() == null ? 2048 : c.getQueueSize();
+       // int queueSize= c.getTaskCount() == null ? 2048 : c.getQueueSize();
+    	int queueSize=c.getQueueSize()==null?2048:c.getQueueSize();
         this.taskCount = c.getTaskCount() == null ? 3 : c.getTaskCount();
         queue = new ArrayBlockingQueue<List<Span>>(queueSize);
         for (int i = 0; i < taskCount; i++) {
