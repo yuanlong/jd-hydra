@@ -16,6 +16,20 @@
 
 package com.jd.bdp.hydra.hbase.service;
 
+import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ws.rs.ApplicationPath;
+
+import org.apache.hadoop.hbase.HColumnDescriptor;
+import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
+import org.junit.Test;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jd.bdp.hydra.Annotation;
@@ -25,29 +39,21 @@ import com.jd.bdp.hydra.Span;
 import com.jd.bdp.hydra.hbase.service.impl.HbaseUtils;
 import com.jd.bdp.hydra.store.inter.InsertService;
 import com.jd.bdp.hydra.store.inter.QueryService;
-import org.apache.hadoop.hbase.HColumnDescriptor;
-import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.client.HBaseAdmin;
-import org.junit.Test;
-import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * User: biandi
  * Date: 13-4-18
  * Time: 下午2:13
  */
-public class QueryServiceTest extends AbstractDependencyInjectionSpringContextTests {
+@ApplicationPath(value="classpath:hydra-hbase-test.xml")
+public class QueryServiceTest extends AbstractJUnit4SpringContextTests {
 
-    @Override
-    protected String[] getConfigLocations() {
+    
+   /* protected String[] getConfigLocations() {
         this.setAutowireMode(AUTOWIRE_BY_NAME);
         String[] location = {"classpath:hydra-hbase-test.xml"};
         return location;
-    }
+    }*/
 
 
     @Test
