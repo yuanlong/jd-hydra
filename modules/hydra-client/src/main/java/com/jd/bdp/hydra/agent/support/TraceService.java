@@ -1,17 +1,17 @@
 package com.jd.bdp.hydra.agent.support;
 
 
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jd.bdp.hydra.Span;
 import com.jd.bdp.hydra.agent.CollectorService;
 import com.jd.bdp.hydra.agent.RegisterService;
 import com.jd.bdp.hydra.dubbomonitor.HydraService;
 import com.jd.bdp.hydra.dubbomonitor.LeaderService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Date: 13-3-27

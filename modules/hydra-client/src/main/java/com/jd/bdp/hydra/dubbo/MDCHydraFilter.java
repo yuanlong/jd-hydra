@@ -10,7 +10,6 @@ package com.jd.bdp.hydra.dubbo;
 import org.apache.log4j.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
@@ -155,7 +154,7 @@ public class MDCHydraFilter {
     }
 
     /*加载Filter的时候加载hydra配置上下文*/
-    static {
+  /*  static {
         logger.info("Hydra filter is loading hydra-config file...");
         String resourceName = "classpath*:hydra-config.xml";
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{
@@ -163,5 +162,8 @@ public class MDCHydraFilter {
         });
         logger.info("Hydra config context is starting,config file path is:" + resourceName);
         context.start();
-    }
+    }*/
+    /*
+     * 将hydra-config.xml的加载放在jar包外部,因为在内部有可能不成功，因为应用tomcat容器
+     */
 }

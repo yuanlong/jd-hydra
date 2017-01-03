@@ -1,5 +1,11 @@
 package com.jd.bdp.hydra.dubbomonitor.provider.impl;
 
+import java.util.List;
+import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jd.bdp.hydra.Span;
 import com.jd.bdp.hydra.dubbomonitor.HydraDubbeConfig;
 import com.jd.bdp.hydra.dubbomonitor.HydraService;
@@ -12,13 +18,11 @@ import com.taobao.metamorphosis.client.producer.MessageProducer;
 import com.taobao.metamorphosis.client.producer.SendResult;
 import com.taobao.metamorphosis.exception.MetaClientException;
 import com.taobao.metamorphosis.utils.ZkUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Properties;
-import java.util.concurrent.atomic.AtomicLong;
-
+/**
+ * 这个类用于连接metaq消息队列，用于数据的消峰
+ * @author Administrator
+ *
+ */
 public class HydraServiceImpl implements HydraService {
     private static final Logger log = LoggerFactory.getLogger(HydraServiceImpl.class);
     private MessageProducer messageProducer = null;
