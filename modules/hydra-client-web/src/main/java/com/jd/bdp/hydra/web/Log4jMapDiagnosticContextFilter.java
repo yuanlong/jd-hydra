@@ -27,6 +27,9 @@ public class Log4jMapDiagnosticContextFilter extends AbstractRequestLoggingFilte
      */
     @Override
     protected void beforeRequest(HttpServletRequest request, String message) {
+        if(worker==null){
+            worker=new IdWorker(workerId, datacenterId, 0L);
+        }
         MDC.put("traceId",  String.valueOf(worker.getId()));
        /* if (log4jLogger.isDebugEnabled()) {
             log4jLogger.debug(message);
