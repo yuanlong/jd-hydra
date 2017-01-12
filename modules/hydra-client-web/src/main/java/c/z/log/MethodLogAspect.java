@@ -1,57 +1,48 @@
 package c.z.log;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
-
-import javassist.ClassClassPath;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.Modifier;
-import javassist.NotFoundException;
-import javassist.bytecode.CodeAttribute;
-import javassist.bytecode.LocalVariableAttribute;
-import javassist.bytecode.MethodInfo;
+import java.lang.reflect.Method;
 
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 
-/**
- * 
- * @author arthur.paincupid.lee
- * @since 2016.04.17
- */
 @Aspect
 public class MethodLogAspect {
+
     private static final org.apache.commons.logging.Log logger = LogFactory.getLog(MethodLogAspect.class);
 
     private static String[] types = { "java.lang.Integer", "java.lang.Double", "java.lang.Float", "java.lang.Long",
             "java.lang.Short", "java.lang.Byte", "java.lang.Boolean", "java.lang.Char", "java.lang.String", "int",
             "double", "long", "short", "byte", "boolean", "char", "float" };
 
-    @After(value = "@annotation(com.zz.learning.logann.MethodLog)")
-    public void afterInvoke(JoinPoint joinPoint) {
+    private static final ThreadLocal<InvokeContext/* 当前线程调用时的初始时间 */> tl = new ThreadLocal<InvokeContext>();
 
+    @After(value = "@annotation(c.z.log.MethodLog)")
+    public void afterInvoke(JoinPoint joinPoint) {
+            InvokeContext context=tl.get();
+            logger.info(String.format("sessionid=%s afterinvoke log elapsed_second=%s",
+                    context.getSessionId(),(System.currentTimeMillis()-context.getInvokeTime())/1000));
+            tl.remove();
     }
 
-    @Before(value = "@annotation(com.zz.learning.logann.MethodLog)")
+    @Before(value = "@annotation(c.z.log.MethodLog)")
     public void beforeInvoke(JoinPoint joinPoint) throws Throwable {
-
-        String classType = joinPoint.getTarget().getClass().getName();
-        Class<?> clazz = Class.forName(classType);
-        String clazzName = clazz.getName();
-        // String clazzSimpleName = clazz.getSimpleName();
-        String methodName = joinPoint.getSignature().getName();
-
-        String[] paramNames = getFieldsName(this.getClass(), clazzName, methodName);
-
+        String[] paramNames = getFieldsName(joinPoint);
         String logContent = writeLogInfo(paramNames, joinPoint);
+        Long sessionId=System.currentTimeMillis();
+        logger.info(String.format("sessionid=%s,beforeinvoke log clazzName:%s, methodName: %s, param:%s",sessionId, joinPoint.getTarget().getClass()
+                .getName(), joinPoint.getSignature().getName(), logContent));
+        tl.set(new InvokeContext(sessionId,System.currentTimeMillis()));
+    }
 
-        // org.apache.commons.logging.Log logger = LogFactory.getLog(clazzName);
-        logger.info("方法调用前置日志 clazzName: " + clazzName + ", methodName:" + methodName + ", param:" + logContent);
-
+    private Method getMethod(JoinPoint joinPoint) {
+        Method m = null;
+        return null;
     }
 
     private String writeLogInfo(String[] paramNames, JoinPoint joinPoint) {
@@ -85,26 +76,33 @@ public class MethodLogAspect {
      * @param clazzName
      * @param methodName
      * @return
+     * @throws SecurityException
+     * @throws NoSuchMethodException
+     * @throws IOException
      * @throws NotFoundException
      */
-    private static String[] getFieldsName(Class cls, String clazzName, String methodName) throws NotFoundException {
-        ClassPool pool = ClassPool.getDefault();
-        ClassClassPath classPath = new ClassClassPath(cls);
-        pool.insertClassPath(classPath);
+    private static String[] getFieldsName(JoinPoint joinPoint) throws NoSuchMethodException, SecurityException,
+            IOException {
 
-        CtClass cc = pool.get(clazzName);
-        CtMethod cm = cc.getDeclaredMethod(methodName);
-        MethodInfo methodInfo = cm.getMethodInfo();
-        CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
-        LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);
-        if (attr == null) {
-            // exception
+        Class clazz = joinPoint.getTarget().getClass();
+        Object[] args = joinPoint.getArgs(); // 参数列表
+
+        Class[] parametersTypes = new Class[args.length];
+        for (int i = 0; i < args.length; i++) {
+            parametersTypes[i] = args[i].getClass();
+
         }
-        String[] paramNames = new String[cm.getParameterTypes().length];
-        int pos = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
-        for (int i = 0; i < paramNames.length; i++) {
-            paramNames[i] = attr.variableName(i + pos); // paramNames即参数名
-        }
+
+        Method method = clazz.getDeclaredMethod(joinPoint.getSignature().getName(), parametersTypes);
+
+     //   String clazzName = joinPoint.getTarget().getClass().getName();
+       // Signature sig = joinPoint.getSignature();
+       // Class detype = sig.getDeclaringType();
+     //   String methodName = joinPoint.getSignature().getName();
+
+        String[] paramNames = MethodParamNamesScanner.methodParamNames(clazz, method);
+        // getFieldsName(this.getClass(), clazzName, methodName);
+
         return paramNames;
     }
 
