@@ -7,7 +7,11 @@ import java.io.Serializable;
  * Time: 下午3:36
  */
 public class BinaryAnnotation implements Serializable {
-    private String key;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4128209099516731295L;
+	private String key;
     private String value;
     private String type;
     private Integer duration;

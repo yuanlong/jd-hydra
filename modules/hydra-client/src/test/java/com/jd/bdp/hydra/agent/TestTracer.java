@@ -69,14 +69,14 @@ public class TestTracer extends TestCase {
             String method = "method_" + i;
             Span span = null;
             span = tracer.newSpan(method,clientEndPoint, "myInterface");
-            if (span.isSample()) {
+           /* if (span.isSample()) {
                 long start = System.currentTimeMillis();
                 tracer.clientSendRecord(span, clientEndPoint, start);
                 tracer.serverReceiveRecord(span, serverEndPoint, start + 5000);
                 tracer.serverSendRecord(tracer.getParentSpan(), serverEndPoint, start + 100000);
                 tracer.removeParentSpan();
                 tracer.clientReceiveRecord(span, clientEndPoint, start + 15000);
-            }
+            }*/
         }
     }
 }

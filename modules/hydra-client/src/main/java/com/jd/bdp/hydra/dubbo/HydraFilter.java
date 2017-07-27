@@ -59,6 +59,7 @@ public class HydraFilter implements Filter {
         boolean isConsumerSide = context.isConsumerSide();
         Span span = null;
         Endpoint endpoint = null;
+        Result result=null;
         try {
             endpoint = tracer.newEndPoint();
 //            endpoint.setServiceName(serviceId);
@@ -69,7 +70,7 @@ public class HydraFilter implements Filter {
                 if (span1 == null) { //为rootSpan
                     span = tracer.newSpan(context.getMethodName(), endpoint, serviceId);//生成root Span
                 } else {
-                    span = tracer.genSpan(span1.getTraceId(), span1.getId(), tracer.genSpanId(), context.getMethodName(), span1.isSample(), null);
+                    span = tracer.genSpan(span1.getTraceId(), span1.getId(), tracer.genSpanId(), context.getMethodName(), span1.isSample(), serviceId);
                 }
             } else if (context.isProviderSide()) {
                 Long traceId, parentId, spanId;
@@ -82,7 +83,7 @@ public class HydraFilter implements Filter {
             invokerBefore(invocation, span, endpoint, start);//记录annotation
             RpcInvocation invocation1 = (RpcInvocation) invocation;
             setAttachment(span, invocation1);//设置需要向下游传递的参数
-            Result result = invoker.invoke(invocation);
+            result = invoker.invoke(invocation);
             if (result.getException() != null){
                 catchException(result.getException(), endpoint);
             }
@@ -141,11 +142,12 @@ public class HydraFilter implements Filter {
 
     private void invokerBefore(Invocation invocation, Span span, Endpoint endpoint, long start) {
         RpcContext context = RpcContext.getContext();
+        RpcInvocation invocation1 = (RpcInvocation) invocation;
         if (context.isConsumerSide() && span.isSample()) {
-            tracer.clientSendRecord(span, endpoint, start);
+            tracer.clientSendRecord(span, endpoint, start,invocation1.toString()); //客户端发送记录
         } else if (context.isProviderSide()) {
             if (span.isSample()) {
-                tracer.serverReceiveRecord(span, endpoint, start);
+                tracer.serverReceiveRecord(span, endpoint, start,invocation1.toString()); //服务端接收记录
             }
             tracer.setParentSpan(span);
         }

@@ -9,7 +9,11 @@ import java.util.List;
  * Time: 下午3:29
  */
 public class Span implements Serializable {
-    private Long traceId;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2705272415955579L;
+	private Long traceId;
     private Long id;
     private Long parentId; //optional
     private String spanName;

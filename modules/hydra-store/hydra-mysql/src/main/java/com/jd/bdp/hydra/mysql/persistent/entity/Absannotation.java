@@ -42,6 +42,7 @@ public class Absannotation {
         this.duration = annotation.getDuration();
         this.ip = annotation.getHost().getIp();
         this.port = annotation.getHost().getPort();
+        this.service = span.getServiceId();
     }
 
     @Override

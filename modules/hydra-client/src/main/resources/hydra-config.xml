@@ -27,11 +27,12 @@
     </bean>
     <bean id="transfer" class="com.jd.bdp.hydra.agent.support.DefaultSyncTransfer">
         <property name="traceService" ref="traceService"/>
+        <property name="appName" value="application_name"></property>
         <constructor-arg ref="configuration"/>
     </bean>
     <!--被HydraFilter使用-->
     <bean id="tracer" class="com.jd.bdp.hydra.agent.Tracer" factory-method="getTracer">
-        <property name="traceService" ref="traceService"/>
+<!--         <property name="traceService" ref="traceService"/> -->
         <property name="transfer" ref="transfer"/>
     </bean>
 

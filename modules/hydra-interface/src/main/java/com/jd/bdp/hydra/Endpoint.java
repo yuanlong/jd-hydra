@@ -7,7 +7,11 @@ import java.io.Serializable;
  * Time: 下午3:36
  */
 public class Endpoint implements Serializable {
-    private String ip;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7796016009786143774L;
+	private String ip;
     private Integer port;
 //    private String serviceName;
 

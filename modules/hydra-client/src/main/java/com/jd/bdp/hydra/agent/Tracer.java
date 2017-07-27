@@ -2,6 +2,8 @@ package com.jd.bdp.hydra.agent;
 
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
+import com.alibaba.dubbo.rpc.Invocation;
+import com.alibaba.dubbo.rpc.RpcInvocation;
 import com.jd.bdp.hydra.Annotation;
 import com.jd.bdp.hydra.BinaryAnnotation;
 import com.jd.bdp.hydra.Endpoint;
@@ -19,7 +21,7 @@ public class Tracer {
 
     private static final Logger logger = LoggerFactory.getLogger(Tracer.class);
 
-    private static Tracer tracer = null;
+    //private static Tracer tracer = null;
 
     private Sampler sampler = new SampleImp();
 
@@ -28,7 +30,7 @@ public class Tracer {
     //传递parentSpan
     private ThreadLocal<Span> spanThreadLocal = new ThreadLocal<Span>();
 
-    TraceService traceService;
+   // TraceService traceService;
 
     private Tracer() {
     }
@@ -113,12 +115,22 @@ public class Tracer {
         }
     }
 
+    /**
+     * 主要就是将调用分成四个阶段：
+     * cs:客户端发送记录；
+     * sr:服务端接收记录;
+     * ss:服务端发送记录;
+     * cr:客户端接收记录
+     * 
+   
+     */
     //构件cs annotation
-    public void clientSendRecord(Span span, Endpoint endpoint, long start) {
+    public void clientSendRecord(Span span, Endpoint endpoint, long start,String paras) {
         Annotation annotation = new Annotation();
         annotation.setValue(Annotation.CLIENT_SEND);
-        annotation.setTimestamp(start);
         annotation.setHost(endpoint);
+        annotation.setTimestamp(start);
+        annotation.setParas(paras);//记录rpc请求方法的参数
         span.addAnnotation(annotation);
     }
 
@@ -134,11 +146,13 @@ public class Tracer {
     }
 
     //构件sr annotation
-    public void serverReceiveRecord(Span span, Endpoint endpoint, long start) {
+    public void serverReceiveRecord(Span span, Endpoint endpoint, long start,String paras) {
         Annotation annotation = new Annotation();
         annotation.setValue(Annotation.SERVER_RECEIVE);
         annotation.setHost(endpoint);
         annotation.setTimestamp(start);
+        annotation.setParas(paras);//记录rpc请求方法的参数
+        
         span.addAnnotation(annotation);
         spanThreadLocal.set(span);
     }
@@ -169,9 +183,9 @@ public class Tracer {
         return transfer.getSpanId();
     }
 
-    public void setTraceService(TraceService traceService) {
+    /*public void setTraceService(TraceService traceService) {
         this.traceService = traceService;
-    }
+    }*/
 
     public void setTransfer(SyncTransfer transfer) {
         this.transfer = transfer;

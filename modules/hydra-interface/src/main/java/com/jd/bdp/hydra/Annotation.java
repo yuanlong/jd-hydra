@@ -7,16 +7,30 @@ import java.io.Serializable;
  * Time: 下午3:36
  */
 public class Annotation implements Serializable {
-    public static final String CLIENT_SEND = "cs";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -381720121226343875L;
+	public static final String CLIENT_SEND = "cs";
     public static final String CLIENT_RECEIVE = "cr";
     public static final String SERVER_SEND = "ss";
-    public static final String SERVER_RECEIVE = "sr";
-    private Long timestamp;
+    public static final String SERVER_RECEIVE = "sr";  
     private String value;
     private Endpoint host;
+    private Long timestamp;
     private Integer duration;
 
-    public Annotation(){
+    
+    private String paras;//增加参数，记录rpc方法调用的参数
+    
+    
+    public String getParas() {
+		return paras;
+	}
+	public void setParas(String paras) {
+		this.paras = paras;
+	}
+	public Annotation(){
 
     }
     public Annotation(Long timestamp, String value, Endpoint host) {

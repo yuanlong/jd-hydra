@@ -1,2 +1,2 @@
-#hydra=com.jd.bdp.hydra.dubbo.HydraFilter
-hydra=com.jd.bdp.hydra.dubbo.MDCHydraFilter
+hydra=com.jd.bdp.hydra.dubbo.HydraFilter
+
