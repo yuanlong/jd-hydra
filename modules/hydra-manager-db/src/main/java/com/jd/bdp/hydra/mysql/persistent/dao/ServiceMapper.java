@@ -30,8 +30,7 @@ public interface ServiceMapper {
     * 操作失败，返回null*/
     void addService(ServicePara servicePara);
 
-    //根据name查找ServicePara
-    ServicePara getService(String name, Integer appId);
+    ServicePara getService(String name);
 
     /*删除一个应用*/
     void deleteService(ServicePara servicePara);
@@ -46,6 +45,5 @@ public interface ServiceMapper {
     //删除所有
     void deleteAll();
 
-    //根据appId查找
-    List<ServicePara> get(Integer appId);
+    List<ServicePara> get();
 }

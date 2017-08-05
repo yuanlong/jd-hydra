@@ -11,7 +11,7 @@ public class StartCollectorMysql {
 
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{
-                "classpath*:dubbo-hydra-provider-mysql.xml"
+                "classpath*:META-INF/spring/dubbo.xml"
         });
         context.start();
         Thread.sleep(999999999);

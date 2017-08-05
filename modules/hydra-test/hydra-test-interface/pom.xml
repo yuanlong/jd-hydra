@@ -5,7 +5,7 @@
     <parent>
         <artifactId>hydra-test</artifactId>
         <groupId>com.jd.bdp</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>2.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -33,15 +33,10 @@
             <artifactId>spring-test</artifactId>
             <version>3.1.2.RELEASE</version>
         </dependency>
-        <!--针对hydra-mysql相关接口进行测试-->
+        <!--针对hydra-store相关接口进行测试-->
         <dependency>
             <groupId>com.jd.bdp</groupId>
-            <artifactId>hydra-mysql</artifactId>
-        </dependency>
-        <!--针对hydra-hbase的测试-->
-        <dependency>
-            <groupId>com.jd.bdp</groupId>
-            <artifactId>hydra-hbase</artifactId>
+            <artifactId>hydra-store</artifactId>
         </dependency>
     </dependencies>
 

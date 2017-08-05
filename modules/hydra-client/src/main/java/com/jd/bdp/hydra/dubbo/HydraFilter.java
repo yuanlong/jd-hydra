@@ -17,143 +17,130 @@ package com.jd.bdp.hydra.dubbo;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
-import com.alibaba.dubbo.common.extension.ExtensionLoader;
-import com.alibaba.dubbo.container.Container;
-import com.alibaba.dubbo.container.spring.SpringContainer;
 import com.alibaba.dubbo.remoting.TimeoutException;
-import com.alibaba.dubbo.rpc.*;
-import com.jd.bdp.hydra.BinaryAnnotation;
-import com.jd.bdp.hydra.Endpoint;
+import com.alibaba.dubbo.rpc.Filter;
+import com.alibaba.dubbo.rpc.Invocation;
+import com.alibaba.dubbo.rpc.Invoker;
+import com.alibaba.dubbo.rpc.Result;
+import com.alibaba.dubbo.rpc.RpcContext;
+import com.alibaba.dubbo.rpc.RpcException;
+import com.alibaba.dubbo.rpc.RpcInvocation;
+import com.jd.bdp.hydra.Annotation;
+import com.jd.bdp.hydra.AnnotationType;
 import com.jd.bdp.hydra.Span;
 import com.jd.bdp.hydra.agent.Tracer;
-import com.jd.bdp.hydra.agent.support.TracerUtils;
+import com.jd.bdp.hydra.agent.Transfer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-import java.io.IOException;
-
-/**
- *
- */
 @Activate(group = {Constants.PROVIDER, Constants.CONSUMER})
 public class HydraFilter implements Filter {
-
     private static Logger logger = LoggerFactory.getLogger(HydraFilter.class);
+    public static final String TID = "traceId";
+    public static final String SID = "spanId";
+    public static final String PID = "parentId";
 
-    private Tracer tracer = null;
+    private static Tracer tracer = Tracer.getTracer();
 
     // 调用过程拦截
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        //异步获取serviceId，没获取到不进行采样
-        String serviceId = tracer.getServiceId(RpcContext.getContext().getUrl().getServiceInterface());
-        if (serviceId == null) {
-            Tracer.startTraceWork();
-            return invoker.invoke(invocation);
-        }
-
         long start = System.currentTimeMillis();
         RpcContext context = RpcContext.getContext();
         boolean isConsumerSide = context.isConsumerSide();
         Span span = null;
-        Endpoint endpoint = null;
+        String ip = context.getLocalHost();
+        int port = context.getLocalPort();
         try {
-            endpoint = tracer.newEndPoint();
-//            endpoint.setServiceName(serviceId);
-            endpoint.setIp(context.getLocalAddressString());
-            endpoint.setPort(context.getLocalPort());
-            if (context.isConsumerSide()) { //是否是消费者
-                Span span1 = tracer.getParentSpan();
-                if (span1 == null) { //为rootSpan
-                    span = tracer.newSpan(context.getMethodName(), endpoint, serviceId);//生成root Span
+            if (context.isConsumerSide()) {
+                Span currentSpan = tracer.getCurrentSpan();
+                if (currentSpan == null) {
+                    span = tracer.genRootSpan(context.getInvoker().getInterface().getCanonicalName(), context.getMethodName());
                 } else {
-                    span = tracer.genSpan(span1.getTraceId(), span1.getId(), tracer.genSpanId(), context.getMethodName(), span1.isSample(), null);
+                    span = tracer.genSpan(currentSpan.getTraceId(), currentSpan.getSpanId(), Tracer.getId(), context.getInvoker().getInterface().getCanonicalName(), context.getMethodName());
                 }
             } else if (context.isProviderSide()) {
-                Long traceId, parentId, spanId;
-                traceId = TracerUtils.getAttachmentLong(invocation.getAttachment(TracerUtils.TID));
-                parentId = TracerUtils.getAttachmentLong(invocation.getAttachment(TracerUtils.PID));
-                spanId = TracerUtils.getAttachmentLong(invocation.getAttachment(TracerUtils.SID));
-                boolean isSample = (traceId != null);
-                span = tracer.genSpan(traceId, parentId, spanId, context.getMethodName(), isSample, serviceId);
+                String traceId, parentId, spanId;
+                traceId = invocation.getAttachment(TID);
+                parentId = invocation.getAttachment(PID);
+                spanId = invocation.getAttachment(SID);
+                span = tracer.genSpan(traceId, parentId, spanId, context.getInvoker().getInterface().getCanonicalName(), context.getMethodName());
             }
-            invokerBefore(invocation, span, endpoint, start);//记录annotation
-            RpcInvocation invocation1 = (RpcInvocation) invocation;
-            setAttachment(span, invocation1);//设置需要向下游传递的参数
+            invokerBefore(invocation, span, ip, port, start);
+            RpcInvocation invocationTmp = (RpcInvocation) invocation;
+            setAttachment(span, invocationTmp);
             Result result = invoker.invoke(invocation);
-            if (result.getException() != null){
-                catchException(result.getException(), endpoint);
+            if (result.getException() != null) {
+                catchException(result.getException(), ip, port);
             }
             return result;
-        }catch (RpcException e) {
-            if (e.getCause() != null && e.getCause() instanceof TimeoutException){
-                catchTimeoutException(e, endpoint);
-            }else {
-                catchException(e, endpoint);
+        } catch (RpcException e) {
+            if (e.getCause() != null && e.getCause() instanceof TimeoutException) {
+                catchTimeoutException(e, ip, port);
+            } else {
+                catchException(e, ip, port);
             }
             throw e;
-        }finally {
+        } finally {
             if (span != null) {
                 long end = System.currentTimeMillis();
-                invokerAfter(invocation, endpoint, span, end, isConsumerSide);//调用后记录annotation
+                invokerAfter(invocation, ip, port, span, end, isConsumerSide);
             }
         }
     }
 
-    private void catchTimeoutException(RpcException e, Endpoint endpoint) {
-        BinaryAnnotation exAnnotation = new BinaryAnnotation();
-        exAnnotation.setKey(TracerUtils.EXCEPTION);
+    private void catchTimeoutException(RpcException e, String ip, int port) {
+        Annotation exAnnotation = new Annotation();
+        exAnnotation.setType(AnnotationType.DubboException);
         exAnnotation.setValue(e.getMessage());
-        exAnnotation.setType("exTimeout");
-        exAnnotation.setHost(endpoint);
+        exAnnotation.setIp(ip);
+        exAnnotation.setPort(port);
         tracer.addBinaryAnntation(exAnnotation);
     }
 
-    private void catchException(Throwable e, Endpoint endpoint) {
-        BinaryAnnotation exAnnotation = new BinaryAnnotation();
-        exAnnotation.setKey(TracerUtils.EXCEPTION);
+    private void catchException(Throwable e, String ip, int port) {
+        Annotation exAnnotation = new Annotation();
+        exAnnotation.setType(AnnotationType.DubboException);
         exAnnotation.setValue(e.getMessage());
-        exAnnotation.setType("ex");
-        exAnnotation.setHost(endpoint);
+        exAnnotation.setIp(ip);
+        exAnnotation.setPort(port);
         tracer.addBinaryAnntation(exAnnotation);
     }
 
     private void setAttachment(Span span, RpcInvocation invocation) {
-        if (span.isSample()) {
-            invocation.setAttachment(TracerUtils.PID, span.getParentId() != null ? String.valueOf(span.getParentId()) : null);
-            invocation.setAttachment(TracerUtils.SID, span.getId() != null ? String.valueOf(span.getId()) : null);
-            invocation.setAttachment(TracerUtils.TID, span.getTraceId() != null ? String.valueOf(span.getTraceId()) : null);
-        }
+        invocation.setAttachment(PID, span.getParentId() != null ? String.valueOf(span.getParentId()) : null);
+        invocation.setAttachment(SID, span.getSpanId() != null ? String.valueOf(span.getSpanId()) : null);
+        invocation.setAttachment(TID, span.getTraceId() != null ? String.valueOf(span.getTraceId()) : null);
     }
 
-    private void invokerAfter(Invocation invocation, Endpoint endpoint, Span span, long end, boolean isConsumerSide) {
-        if (isConsumerSide && span.isSample()) {
-            tracer.clientReceiveRecord(span, endpoint, end);
-        } else {
-            if (span.isSample()) {
-                tracer.serverSendRecord(span, endpoint, end);
+    private void invokerAfter(Invocation invocation, String ip, int port, Span span, long end, boolean isConsumerSide) {
+        if (checkFilter(invocation)) {
+            if (isConsumerSide) {
+                tracer.clientReceiveRecord(span, ip, port, end);
+            } else {
+                tracer.serverSendRecord(span, ip, port, end);
             }
-            tracer.removeParentSpan();
         }
     }
 
-    private void invokerBefore(Invocation invocation, Span span, Endpoint endpoint, long start) {
-        RpcContext context = RpcContext.getContext();
-        if (context.isConsumerSide() && span.isSample()) {
-            tracer.clientSendRecord(span, endpoint, start);
-        } else if (context.isProviderSide()) {
-            if (span.isSample()) {
-                tracer.serverReceiveRecord(span, endpoint, start);
+    private void invokerBefore(Invocation invocation, Span span, String ip, int port, long start) {
+        if (checkFilter(invocation)) {
+            RpcContext context = RpcContext.getContext();
+            if (context.isConsumerSide()) {
+                tracer.clientSendRecord(span, ip, port, start);
+            } else if (context.isProviderSide()) {
+                tracer.serverReceiveRecord(span, ip, port, start);
             }
-            tracer.setParentSpan(span);
         }
     }
 
-    //setter
-    public void setTracer(Tracer tracer) {
-        this.tracer = tracer;
+    private static boolean checkFilter(Invocation invocation) {
+        String interfaceCanonicalName = invocation.getInvoker().getInterface().getCanonicalName();
+        if ("com.alibaba.dubbo.monitor.MonitorService".equals(interfaceCanonicalName)) {
+            return false;
+        }
+        return true;
     }
 
     /*加载Filter的时候加载hydra配置上下文*/
@@ -163,6 +150,8 @@ public class HydraFilter implements Filter {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{
                 resourceName
         });
+        Transfer transfer = (Transfer) context.getBean("transfer");
+        tracer.setTransfer(transfer);
         logger.info("Hydra config context is starting,config file path is:" + resourceName);
         context.start();
     }

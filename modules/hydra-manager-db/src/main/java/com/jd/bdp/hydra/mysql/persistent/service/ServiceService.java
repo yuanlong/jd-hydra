@@ -26,6 +26,6 @@ import java.util.List;
  * Time: 下午1:17
  */
 public interface ServiceService {
-    String getServiceId(String serviceName, String appName);
-    List<ServicePara> get(Integer appId);
+    String getServiceId(String serviceName);
+    List<ServicePara> get();
 }

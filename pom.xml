@@ -6,29 +6,10 @@
 
     <groupId>com.jd.bdp</groupId>
     <artifactId>hydra</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>2.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <!-- 用于发布到外网maven库 -->
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
-
     <name>HYDRA</name>
-
-    <!-- description和url待定 -->
-    <description></description>
-    <url></url>
-
-    <!-- scm待定 -->
-    <scm>
-        <connection>scm:git:https://github.com/jd-bdp/hydra.git</connection>
-        <url>scm:git:https://github.com/jd-bdp/hydra.git</url>
-        <developerConnection>scm:git:https://github.com/jd-bdp/hydra.git</developerConnection>
-    </scm>
-
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -65,61 +46,56 @@
             </roles>
             <timezone>+8</timezone>
         </developer>
+        <developer>
+            <name>yangguo</name>
+            <id>yangguo</id>
+            <email>yangguo@outlook.com</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+8</timezone>
+        </developer>
     </developers>
 
     <!-- Modules -->
     <modules>
-        <module>modules/hydra-web</module>
-        <module>modules/hydra-example</module>
+        <!--<module>modules/hydra-web</module>-->
         <module>modules/hydra-client</module>
         <module>modules/hydra-interface</module>
-        <module>modules/hydra-manager</module>
         <module>modules/hydra-collector</module>
-        <module>modules/hydra-collector-service</module>
-        <module>modules/hydra-store</module>
-        <module>modules/hydra-manager-db</module>
-        <module>modules/hydra-test</module>
+        <!--<module>modules/hydra-store</module>-->
+        <!--<module>modules/hydra-manager-db</module>-->
+        <!--<module>modules/hydra-test</module>-->
     </modules>
 
     <properties>
+        <maven.test.skip>true</maven.test.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <junit.version>4.9</junit.version>
-        <springframework-version>3.1.2.RELEASE</springframework-version>
+        <springframework-version>4.2.5.RELEASE</springframework-version>
         <servlet.version>2.5</servlet.version>
         <jackson.version>1.9.10</jackson.version>
         <fastjson.version>1.1.28</fastjson.version>
+        <com.fasterxml.version>2.6.4</com.fasterxml.version>
         <jsp-api.version>2.1</jsp-api.version>
         <jstl-api.version>1.2</jstl-api.version>
-        <dubbo.version>2.4.8-SNAPSHOT</dubbo.version>
+        <dubbo.version>2.8.5</dubbo.version>
         <validation-api.version>1.0.0.GA</validation-api.version>
-        <metamorphosis.version>1.4.3</metamorphosis.version>
         <disruptor.version>2.10.3</disruptor.version>
-        <glowworm.version>1.0-SNAPSHOT</glowworm.version>
         <slf4j.version>1.6.4</slf4j.version>
         <log4j.version>1.2.15</log4j.version>
-        <hessian.version>3.2.2</hessian.version>
-        <zkclient.version>0.1</zkclient.version>
+        <hessian.version>4.0.38</hessian.version>
         <mybatis.version>3.0.6</mybatis.version>
         <mybatis-spring>1.0.0</mybatis-spring>
         <mysql-connector-java.version>5.1.22</mysql-connector-java.version>
-        <google-collections.version>1.0</google-collections.version>
-        <hadoop-common.version>bdp-2.0.0-cdh4.1.1</hadoop-common.version>
-        <hbase.version>bdp-0.92.1-cdh4.1.1</hbase.version>
-        <commons-configuration.version>1.9</commons-configuration.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <druid.version>0.2.17</druid.version>
+        <tomcat-jdbc.version>8.0.29</tomcat-jdbc.version>
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
-            <!-- children mudules -->
-            <dependency>
-                <groupId>com.jd.bdp</groupId>
-                <artifactId>hydra-web</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.jd.bdp</groupId>
                 <artifactId>hydra-client</artifactId>
@@ -132,37 +108,17 @@
             </dependency>
             <dependency>
                 <groupId>com.jd.bdp</groupId>
-                <artifactId>hydra-example</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jd.bdp</groupId>
                 <artifactId>hydra-interface</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.jd.bdp</groupId>
-                <artifactId>hydra-manager</artifactId>
+                <artifactId>hydra-register</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.jd.bdp</groupId>
-                <artifactId>hydra-collector-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jd.bdp</groupId>
-                <artifactId>hydra-store-interface</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jd.bdp</groupId>
-                <artifactId>hydra-hbase</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jd.bdp</groupId>
-                <artifactId>hydra-mysql</artifactId>
+                <artifactId>hydra-store</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -185,13 +141,11 @@
                 <artifactId>hydra-example-exp2</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- test -->
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
             </dependency>
-            <!--spring -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
@@ -232,7 +186,6 @@
                 <artifactId>spring-test</artifactId>
                 <version>${springframework-version}</version>
             </dependency>
-            <!-- servlet-->
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
@@ -253,33 +206,26 @@
                 <artifactId>jstl-impl</artifactId>
                 <version>${jstl-api.version}</version>
             </dependency>
-            <!-- json -->
             <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-mapper-asl</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${com.fasterxml.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-core-asl</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-core-lgpl</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-mapper-lgpl</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${com.fasterxml.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
-            <!-- dubbo -->
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>3.4.6</version>
+            </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>dubbo</artifactId>
@@ -291,7 +237,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <!-- log -->
             <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
@@ -321,52 +266,10 @@
                 <version>${slf4j.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jcl-over-slf4j</artifactId>
-                <version>${slf4j.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${slf4j.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            <!-- metamorphosis -->
-            <dependency>
-                <groupId>com.taobao.metamorphosis</groupId>
-                <artifactId>metamorphosis-client</artifactId>
-                <version>${metamorphosis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.taobao.metamorphosis</groupId>
-                <artifactId>metamorphosis-tools</artifactId>
-                <version>${metamorphosis.version}</version>
-            </dependency>
-            <!-- disruptor -->
-            <dependency>
                 <groupId>com.googlecode.disruptor</groupId>
                 <artifactId>disruptor</artifactId>
                 <version>${disruptor.version}</version>
             </dependency>
-            <!-- serialize -->
-            <dependency>
-                <groupId>com.jd.dd</groupId>
-                <artifactId>glowworm</artifactId>
-                <version>${glowworm.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.caucho</groupId>
-                <artifactId>hessian</artifactId>
-                <version>${hessian.version}</version>
-            </dependency>
-            <!-- zookeeper -->
-            <dependency>
-                <groupId>com.github.sgroschupf</groupId>
-                <artifactId>zkclient</artifactId>
-                <version>${zkclient.version}</version>
-            </dependency>
-            <!-- db -->
             <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
@@ -382,160 +285,70 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
             </dependency>
-            <!-- hbase -->
-            <dependency>
-                <groupId>org.apache.hadoop</groupId>
-                <artifactId>hadoop-common</artifactId>
-                <version>${hadoop-common.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.hbase</groupId>
-                <artifactId>hbase</artifactId>
-                <version>${hbase.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-configuration</groupId>
-                <artifactId>commons-configuration</artifactId>
-                <version>${commons-configuration.version}</version>
-            </dependency>
-            <!-- others -->
             <dependency>
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
                 <version>${validation-api.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.google.collections</groupId>
-                <artifactId>google-collections</artifactId>
-                <version>${google-collections.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version>${commons-lang.version}</version>
             </dependency>
-            <!-- 连接池 -->
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>${druid.version}</version>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-jdbc</artifactId>
+                <version>${tomcat-jdbc.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
     <build>
-        <pluginManagement>
-            <plugins>
-            <!-- compiler插件, 设定JDK版本 -->
+        <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <encoding>UTF-8</encoding>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>utf-8</encoding>
                 </configuration>
+                <version>2.3.2</version>
             </plugin>
-
-            <!-- test插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <!--<skip>true</skip>-->
-                    <failIfNoTests>false</failIfNoTests>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
-                </configuration>
-            </plugin>
-
-            <!-- resource插件, 设定编码 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-
-            <!-- clean插件-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-            </plugin>
-
-            <!-- install插件-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-            </plugin>
-
-            <!-- deploy插件-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-            </plugin>
-
-
-            <!-- war插件-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <warName>${project.artifactId}</warName>
-                </configuration>
-            </plugin>
-
-            <!-- jar插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <archive>
                         <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
                 </configuration>
+                <version>2.6</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
             </plugin>
-
-            <!-- dependency插件 -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+                <version>1.0-m4</version>
             </plugin>
-
-            <!--release 插件-->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>2.1</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        </plugins>
     </build>
 
-    <!-- glowworm序列化组建上传到这个maven仓库中 -->
-    <repositories>
+    <distributionManagement>
         <repository>
-            <id>sonatype</id>
-            <url>
-                http://oss.sonatype.org/content/repositories/snapshots/
-            </url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <id>group-releases</id>
+            <name>Nexus Release Repository</name>
+            <url>http://172.16.3.133:8081/nexus/content/repositories/releases/</url>
         </repository>
-    </repositories>
-
+        <snapshotRepository>
+            <id>group-snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://172.16.3.133:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

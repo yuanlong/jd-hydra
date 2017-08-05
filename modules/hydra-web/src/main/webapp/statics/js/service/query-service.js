@@ -100,24 +100,36 @@ angular.module('hydra.services.query', [])
                 table.fnClearTable();
                 table.fnAddData(traceList);
             },
-            appChange:function (myScope) {
+            // appChange:function (myScope) {
+            //     $('#serviceName').val('');
+            //     var appId;
+            //     if (myScope.query.selectApp){
+            //         appId = myScope.query.selectApp.id;
+            //     }
+            //     if (appId){
+            //         myScope.query.serviceList = ServiceList.getAll({appId: appId}, function (serviceList) {
+            //             var serviceArray = [];
+            //             for (var i in serviceList) {
+            //                 serviceArray.push(serviceList[i].name);
+            //                 myScope.serviceMap[myScope.query.serviceList[i].id] = myScope.query.serviceList[i].name;
+            //             }
+            //             $('#serviceName').data('typeahead').source = serviceArray;
+            //         });
+            //     }else {
+            //         $('#serviceName').data('typeahead').source = [];
+            //     }
+            // },
+            //FIXME add
+            getAllServices:function (myScope) {
                 $('#serviceName').val('');
-                var appId;
-                if (myScope.query.selectApp){
-                    appId = myScope.query.selectApp.id;
-                }
-                if (appId){
-                    myScope.query.serviceList = ServiceList.getAll({appId: appId}, function (serviceList) {
-                        var serviceArray = [];
-                        for (var i in serviceList) {
-                            serviceArray.push(serviceList[i].name);
-                            myScope.serviceMap[myScope.query.serviceList[i].id] = myScope.query.serviceList[i].name;
-                        }
-                        $('#serviceName').data('typeahead').source = serviceArray;
-                    });
-                }else {
-                    $('#serviceName').data('typeahead').source = [];
-                }
+                myScope.query.serviceList = ServiceList.getAllNoAppId(function (serviceList) {
+                    var serviceArray = [];
+                    for (var i in serviceList) {
+                        serviceArray.push(serviceList[i].name);
+                        myScope.serviceMap[myScope.query.serviceList[i].id] = myScope.query.serviceList[i].name;
+                    }
+                    $('#serviceName').data('typeahead').source = serviceArray;
+                });
             }
         };
     }]);

@@ -3,7 +3,8 @@ package com.jd.bdp.hydra.jmetertest.QueryService;
 import com.alibaba.fastjson.JSONObject;
 import com.jd.bdp.hydra.jmetertest.support.AbstractJmeterDBContext;
 import com.jd.bdp.hydra.jmetertest.support.HbaseDBContext;
-import com.jd.bdp.hydra.store.inter.QueryService;
+import com.jd.bdp.hydra.store.QueryService;
+
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;

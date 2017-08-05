@@ -3,179 +3,115 @@ package com.jd.bdp.hydra.agent;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.jd.bdp.hydra.Annotation;
-import com.jd.bdp.hydra.BinaryAnnotation;
-import com.jd.bdp.hydra.Endpoint;
+import com.jd.bdp.hydra.AnnotationType;
 import com.jd.bdp.hydra.Span;
-import com.jd.bdp.hydra.agent.support.*;
-import com.jd.bdp.hydra.dubbomonitor.HydraService;
-import com.jd.bdp.hydra.dubbomonitor.LeaderService;
 
-/**
- * Date: 13-3-19
- * Time: 下午4:14
- * 系统跟踪类(单例)
-  */
+import java.util.UUID;
 
 public class Tracer {
-
     private static final Logger logger = LoggerFactory.getLogger(Tracer.class);
+    private static final ThreadLocal<Span> spanThreadLocal = new ThreadLocal<Span>();
+    private Transfer transfer;
 
-    private static Tracer tracer = null;
-
-    private Sampler sampler = new SampleImp();
-
-    private SyncTransfer transfer = null;
-
-    //传递parentSpan
-    private ThreadLocal<Span> spanThreadLocal = new ThreadLocal<Span>();
-
-    TraceService traceService;
+    public void setTransfer(Transfer transfer) {
+        this.transfer = transfer;
+    }
 
     private Tracer() {
     }
 
-    public void removeParentSpan() {
-        spanThreadLocal.remove();
+    private static class TraceHolder {
+        static Tracer instance = new Tracer();
     }
 
-    public Span getParentSpan() {
+    public static Tracer getTracer() {
+        return TraceHolder.instance;
+    }
+
+    public Span getCurrentSpan() {
         return spanThreadLocal.get();
     }
 
-    public void setParentSpan(Span span) {
-        spanThreadLocal.set(span);
-    }
-
-    //构件Span，参数通过上游接口传递过来
-    public Span genSpan(Long traceId, Long pid, Long id, String spanname, boolean isSample, String serviceId) {
+    public Span genSpan(String traceId, String pid, String id, String service, String spanname) {
         Span span = new Span();
-        span.setId(id);
-        span.setParentId(pid);
-        span.setSpanName(spanname);
-        span.setSample(isSample);
         span.setTraceId(traceId);
-        span.setServiceId(serviceId);
-        return span;
-    }
-
-    //构件rootSpan,是否采样
-    public Span newSpan(String spanname, Endpoint endpoint, String serviceId) {
-        boolean s = isSample();
-        Span span = new Span();
-        span.setTraceId(s ? genTracerId() : null);
-        span.setId(s ? genSpanId() : null);
+        span.setSpanId(id);
+        span.setParentId(pid);
+        span.setServiceId(service);
         span.setSpanName(spanname);
-        span.setServiceId(serviceId);
-        span.setSample(s);
-//        if (s) {//应用名写入
-//            BinaryAnnotation appname = new BinaryAnnotation();
-//            appname.setKey("dubbo.applicationName");
-//            appname.setValue(transfer.appName().getBytes());
-//            appname.setType("string");
-//            appname.setHost(endpoint);
-//            span.addBinaryAnnotation(appname);
-//        }
         return span;
     }
 
-    public Endpoint newEndPoint() {
-        return new Endpoint();
+    /**
+     * 只有consumer会生成RootSpan
+     */
+    public Span genRootSpan(String service, String spanname) {
+        Span span = new Span();
+        span.setTraceId(getId());
+        span.setSpanId(getId());
+        span.setServiceId(service);
+        span.setSpanName(spanname);
+        return span;
     }
 
-    private static class  TraceHolder{
-        static Tracer instance=new Tracer();
-    }
-    public static Tracer getTracer() {
-       return TraceHolder.instance;
-    }
-
-    public void start() throws Exception {
-        transfer.start();
-    }
-
-    //启动后台消息发送线程
-    public static void startTraceWork() {
-        try {
-            getTracer().start();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-
-    public boolean isSample() {
-        return sampler.isSample() && (transfer != null && transfer.isReady());
-    }
-
-    public void addBinaryAnntation(BinaryAnnotation b) {
+    public void addBinaryAnntation(Annotation b) {
         Span span = spanThreadLocal.get();
         if (span != null) {
-            span.addBinaryAnnotation(b);
+            span.addAnnotation(b);
         }
     }
 
-    //构件cs annotation
-    public void clientSendRecord(Span span, Endpoint endpoint, long start) {
+    //cs annotation
+    public void clientSendRecord(Span span, String ip, int port, long start) {
         Annotation annotation = new Annotation();
-        annotation.setValue(Annotation.CLIENT_SEND);
-        annotation.setTimestamp(start);
-        annotation.setHost(endpoint);
+        annotation.setType(AnnotationType.ClientSend);
+        annotation.setTime(start);
+        annotation.setIp(ip);
+        annotation.setPort(port);
+        annotation.setSpanId(span.getSpanId());
         span.addAnnotation(annotation);
     }
 
 
-    //构件cr annotation
-    public void clientReceiveRecord(Span span, Endpoint endpoint, long end) {
+    //cr annotation
+    public void clientReceiveRecord(Span span, String ip, int port, long end) {
         Annotation annotation = new Annotation();
-        annotation.setValue(Annotation.CLIENT_RECEIVE);
-        annotation.setHost(endpoint);
-        annotation.setTimestamp(end);
+        annotation.setType(AnnotationType.ClientRecevie);
+        annotation.setIp(ip);
+        annotation.setPort(port);
+        annotation.setTime(end);
+        annotation.setSpanId(span.getSpanId());
         span.addAnnotation(annotation);
-        transfer.syncSend(span);
+        transfer.send(span);
     }
 
-    //构件sr annotation
-    public void serverReceiveRecord(Span span, Endpoint endpoint, long start) {
+    //sr annotation
+    public void serverReceiveRecord(Span span, String ip, int port, long start) {
         Annotation annotation = new Annotation();
-        annotation.setValue(Annotation.SERVER_RECEIVE);
-        annotation.setHost(endpoint);
-        annotation.setTimestamp(start);
+        annotation.setType(AnnotationType.ServerReceive);
+        annotation.setIp(ip);
+        annotation.setPort(port);
+        annotation.setTime(start);
+        annotation.setSpanId(span.getSpanId());
         span.addAnnotation(annotation);
         spanThreadLocal.set(span);
     }
 
-    //构件 ss annotation
-    public void serverSendRecord(Span span, Endpoint endpoint, long end) {
+    //ss annotation
+    public void serverSendRecord(Span span, String ip, int port, long end) {
         Annotation annotation = new Annotation();
-        annotation.setTimestamp(end);
-        annotation.setHost(endpoint);
-        annotation.setValue(Annotation.SERVER_SEND);
+        annotation.setType(AnnotationType.ServerSend);
+        annotation.setTime(end);
+        annotation.setIp(ip);
+        annotation.setPort(port);
+        annotation.setSpanId(span.getSpanId());
         span.addAnnotation(annotation);
-        transfer.syncSend(span);
+        spanThreadLocal.remove();
+        transfer.send(span);
     }
 
-    public String getServiceId(String name) {
-        String id = null;
-        if (transfer != null) {
-            id = transfer.getServiceId(name);
-        }
-        return id;
-    }
-
-    public Long genTracerId() {
-        return transfer.getTraceId();
-    }
-
-    public Long genSpanId() {
-        return transfer.getSpanId();
-    }
-
-    public void setTraceService(TraceService traceService) {
-        this.traceService = traceService;
-    }
-
-    public void setTransfer(SyncTransfer transfer) {
-        this.transfer = transfer;
+    public static String getId() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 }
 
